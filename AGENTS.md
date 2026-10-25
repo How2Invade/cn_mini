@@ -1,0 +1,11 @@
+# AGENTS.md
+- Read PROGRESS.md and DECISIONS.md before every work session.
+- Never fabricate data, test results, citations or Packet Tracer output.
+- The site is a browser simulation, not connected to Packet Tracer.
+- Label every metric: Browser-simulated / Imported / Calculated / Unavailable.
+- The antondemian repo is the primary source; credit it and the Varne paper.
+- Finish must-have features, with tests passing, before anything else.
+- Log every decision and bug fix.
+- Do not stop at a plan, a mockup, or a partial build: build, test, fix, and deliver a working system.
+- Simple Mode / Nerd Mode toggle must be authentic and present technical diagnostic depth in Nerd Mode.
+- Network Copilot must be deterministic and cite verified facts only.
