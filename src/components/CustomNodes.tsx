@@ -49,10 +49,14 @@ export const NetworkNodeComponent = memo(({ data }: NodeProps) => {
           : 'border-slate-200 hover:border-slate-400'
       }`}
     >
+      <Handle type="source" position={Position.Top} id="top-src" className="!w-2.5 !h-2.5 !bg-slate-400 !border-2 !border-white" />
       <Handle type="target" position={Position.Top} id="top" className="!w-2.5 !h-2.5 !bg-slate-400 !border-2 !border-white" />
       <Handle type="source" position={Position.Bottom} id="bottom" className="!w-2.5 !h-2.5 !bg-slate-400 !border-2 !border-white" />
+      <Handle type="target" position={Position.Bottom} id="bottom-tgt" className="!w-2.5 !h-2.5 !bg-slate-400 !border-2 !border-white" />
       <Handle type="target" position={Position.Left} id="left" className="!w-2.5 !h-2.5 !bg-slate-400 !border-2 !border-white" />
+      <Handle type="source" position={Position.Left} id="left-src" className="!w-2.5 !h-2.5 !bg-slate-400 !border-2 !border-white" />
       <Handle type="source" position={Position.Right} id="right" className="!w-2.5 !h-2.5 !bg-slate-400 !border-2 !border-white" />
+      <Handle type="target" position={Position.Right} id="right-tgt" className="!w-2.5 !h-2.5 !bg-slate-400 !border-2 !border-white" />
       
       <div className="flex items-center gap-2">
         <div className="p-1.5 rounded-md bg-slate-50 border border-slate-200">

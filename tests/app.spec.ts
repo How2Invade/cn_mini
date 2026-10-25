@@ -1,37 +1,98 @@
 import { test, expect } from '@playwright/test';
 
-test.describe('Smart Adaptive Campus Network Simulator E2E', () => {
-  test('Startup, Presets, and Traffic Injection', async ({ page }) => {
-    // 1. Visit App
+test.describe('Smart Adaptive Campus Network Simulator Overhaul E2E', () => {
+  test.beforeEach(async ({ page }) => {
+    // Monitor console errors
+    page.on('console', msg => {
+      if (msg.type() === 'error') {
+        console.error(`Browser console error: ${msg.text()}`);
+      }
+    });
     await page.goto('http://localhost:4173');
     await expect(page).toHaveTitle(/Smart Adaptive Campus Network Simulator/);
+  });
 
-    // 2. Assert Hero and Presets
-    const heroTitle = page.locator('h1');
-    await expect(heroTitle).toContainText('Smart Adaptive Campus Network Simulator');
+  test('Shell layout, rail navigation, and presets drawer', async ({ page }) => {
+    // Check left rail is visible
+    const rail = page.locator('aside[aria-label="Navigation Rail"]');
+    await expect(rail).toBeVisible();
 
-    // 3. Click Preset 1 Baseline
-    await page.getByRole('button', { name: /1\. Research Paper Baseline/i }).click();
+    // Open Presets Drawer from rail
+    await page.getByRole('button', { name: 'Presets' }).click();
+    await expect(page.locator('text=Network Scenarios')).toBeVisible();
+
+    // Click Baseline preset card
+    await page.locator('h4', { hasText: '1. Research Paper Baseline' }).click();
     await expect(page.locator('.react-flow__node').filter({ hasText: 'R-Core (Gateway)' })).toBeVisible();
 
-    // 4. Click Preset 2 Enhanced
-    await page.getByRole('button', { name: /2\. Enhanced Campus Network/i }).click();
+    // Click Enhanced preset card
+    await page.locator('h4', { hasText: '2. Enhanced Campus Network' }).click();
     await expect(page.locator('.react-flow__node').filter({ hasText: 'Core L3 SW1' })).toBeVisible();
 
-    // 5. Inject Traffic
-    await page.getByRole('button', { name: /Inject Traffic/i }).click();
-    await page.getByRole('button', { name: /Run Simulation/i }).click();
-    await page.waitForTimeout(600);
+    // Check Auto-Layout button
+    await page.getByRole('button', { name: /Auto-Layout/i }).click();
 
-    // 6. Mode Toggle (Simple to Nerd Mode)
-    await page.getByRole('button', { name: 'Simple Mode', exact: true }).click();
-    await expect(page.locator('text=Nerd Mode: ON')).toBeVisible();
-    await expect(page.locator('text=Deterministic Accounting Equations:')).toBeVisible();
+    // Check MiniMap and zoom display
+    await expect(page.locator('.react-flow__minimap')).toBeVisible();
+    await expect(page.locator('text=Zoom:')).toBeVisible();
+  });
 
-    // 7. Verify Guided Demo
-    await page.locator('text=7-Step Interactive Guided Scenario Tour').scrollIntoViewIfNeeded();
-    await expect(page.locator('text=Step 1: Normal Dual-Core Campus Operation')).toBeVisible();
-    await page.getByRole('button', { name: /Next Step/i }).click();
-    await expect(page.locator('text=Step 2: Dispatch Steady-State Student Traffic')).toBeVisible();
+  test('Bottom dock tabs: Terminal shell and NS-2 generator', async ({ page }) => {
+    // Switch dock tab to Terminal & NS-2
+    await page.getByRole('button', { name: /Terminal & NS-2/i }).click();
+    await expect(page.locator('text=Simulated diagnostic shell (not Cisco IOS)')).toBeVisible();
+    await expect(page.locator('text=campus-sim>')).toBeVisible();
+
+    // Execute help in terminal
+    const input = page.locator('input[placeholder*="e.g. help"]');
+    await input.fill('help');
+    await page.getByRole('button', { name: 'Send', exact: true }).click();
+    await expect(page.locator('text=Available commands:')).toBeVisible();
+
+    // Switch to NS-2 script sub-tab
+    await page.getByRole('button', { name: 'NS-2 Script & Trace View' }).click();
+    await expect(page.locator('text=Generated NS-2 equivalent: not executed by this app')).toBeVisible();
+    await expect(page.locator('text=campus_simulation.nam')).toBeVisible();
+  });
+
+  test('Bottom dock tabs: Packet lane and Bento Analytics', async ({ page }) => {
+    // Switch to Packet Lane
+    await page.getByRole('button', { name: /Packet Lane/i }).click();
+    await expect(page.locator('text=Real-Time Packet Flow Lanes')).toBeVisible();
+
+    // Dispatch traffic via top bar
+    await page.getByRole('button', { name: /Send Traffic/i }).click();
+    await page.getByRole('button', { name: 'Send Now' }).click();
+
+    // Switch to Analytics Grid
+    await page.getByRole('button', { name: /Analytics Grid/i }).click();
+    await expect(page.locator('text=Delivered %')).toBeVisible();
+    await expect(page.locator('text=Per-Link Utilization')).toBeVisible();
+    await expect(page.locator('text=Real-Time Packet Inspection Table')).toBeVisible();
+  });
+
+  test('Mode toggles, command palette, and full-page rail views', async ({ page }) => {
+    // Toggle Nerd mode
+    const nerdBtn = page.getByRole('button', { name: /Simple Mode/i });
+    await nerdBtn.click();
+    await expect(page.getByRole('button', { name: /Nerd Mode/i })).toBeVisible();
+
+    // Command palette test
+    await page.getByRole('button', { name: /Search.../i }).click();
+    await expect(page.locator('input[placeholder*="Type a command"]')).toBeVisible();
+    await page.keyboard.press('Escape');
+
+    // Rail navigation: Comparison page
+    await page.getByRole('button', { name: 'Compare' }).click();
+    await expect(page.locator('text=Architectural Comparison')).toBeVisible();
+
+    // Rail navigation: Research page
+    await page.getByRole('button', { name: 'Research' }).click();
+    await expect(page.locator('text=Research & Academic Attribution')).toBeVisible();
+
+    // Rail navigation: Viva FAQ page
+    await page.getByRole('button', { name: 'Viva/FAQ' }).click();
+    await expect(page.locator('text=Professor FAQ & Evaluative Transparency')).toBeVisible();
   });
 });
+

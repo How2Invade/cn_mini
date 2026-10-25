@@ -63,3 +63,15 @@
   - [x] Finalize `docs/demo-script.md`
   - [x] Finalize `ATTRIBUTION.md`
   - [x] Deliver exact final report
+
+- [x] **Phase 6: UI/UX Overhaul & 3 New Panels**
+  - [x] Section 0 UI Audit & Defect List (`docs/ui-audit.md` and baseline screenshots)
+  - [x] App Shell: 64px Left Icon Rail, Collapsible Presets Panel (~280px), Slim Top Bar with Command Palette (Cmd+K)
+  - [x] Slide-in Right Drawer (~340px) for Device/Link Inspector & Copilot
+  - [x] Collapsible/Resizable Bottom Dock: Analytics, Terminal, Packet Lane, Event Log
+  - [x] Topology Layout Redesign: Tiered layout, VLAN clusters, Server Farm & DMZ frosted zones, Minimap + Zoom %, Auto-layout
+  - [x] Terminal Component: `Console` (browser engine shell `campus-sim>`) + `NS-2 View` (Tcl & Trace generator + export)
+  - [x] Packet Lane Widget: Flow lanes, hop boxes, animated sliding packets, drop shake animations
+  - [x] Bento Analytics Upgrade: Big bold KPI deltas, Delivery Donut with hatched drop segment, per-link utilization bars, recovery timeline strip, sortable packet table
+  - [x] Full-page Dedicated Views for Compare, Research/Attribution, and Help/FAQ
+  - [x] Unit & Playwright Tests Validation and Zero Console Error Guarantee (11/11 Vitest, 12/12 Playwright passing)

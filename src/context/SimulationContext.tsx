@@ -42,6 +42,9 @@ interface SimulationContextType {
   toggleQoS: () => void;
   activePath: string[] | null;
   updateDevicePosition: (id: string, x: number, y: number) => void;
+  terminalLogs: string[];
+  executeCommand: (cmd: string) => string;
+  autoLayoutPreset: () => void;
 }
 
 const SimulationContext = createContext<SimulationContextType | null>(null);
@@ -140,6 +143,241 @@ export const SimulationProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     });
   }, []);
 
+  const [terminalLogs, setTerminalLogs] = useState<string[]>([
+    'Smart Adaptive Campus Network Simulator diagnostic shell initialized.',
+    'Engine ready. Type "help" for available commands.',
+    'Preset loaded: ' + PRESETS[1].title
+  ]);
+
+  const echoCommand = useCallback((cmd: string) => {
+    setTerminalLogs(prev => [...prev.slice(-300), `campus-sim> ${cmd}`]);
+  }, []);
+
+  const executeCommand = useCallback((rawCmd: string): string => {
+    const trimmed = rawCmd.trim();
+    if (!trimmed) return '';
+    echoCommand(trimmed);
+
+    const parts = trimmed.split(/\s+/);
+    const cmd = parts[0].toLowerCase();
+    const args = parts.slice(1);
+
+    const appendLog = (msg: string) => {
+      setTerminalLogs(prev => [...prev.slice(-300), msg]);
+      return msg;
+    };
+
+    switch (cmd) {
+      case 'help':
+        return appendLog(
+          'Available commands:\n' +
+          '  run / pause / reset\n' +
+          '  step\n' +
+          '  preset <id> (e.g. preset preset-1-baseline, preset preset-2-enhanced)\n' +
+          '  send <src> <dst> [count] [class: CLASS_BEST_EFFORT|CLASS_HIGH]\n' +
+          '  fail link <linkId>  /  restore link <linkId>\n' +
+          '  ping <src> <dst>\n' +
+          '  traceroute <src> <dst>\n' +
+          '  show route <deviceId>\n' +
+          '  show links\n' +
+          '  show queue <linkId>\n' +
+          '  show vlan\n' +
+          '  show metrics\n' +
+          '  qos on|off\n' +
+          '  export json\n' +
+          '  clear'
+        );
+
+      case 'run':
+        setIsRunning(true);
+        return appendLog('Simulation loop started.');
+
+      case 'pause':
+        setIsRunning(false);
+        return appendLog('Simulation paused.');
+
+      case 'reset':
+        resetCurrent();
+        return appendLog('Simulation topology and counters reset to current preset.');
+
+      case 'step':
+        stepOnce();
+        return appendLog(`Stepped engine to tick ${engineRef.current.tick}.`);
+
+      case 'preset': {
+        const pId = args[0];
+        const match = PRESETS.find(p => p.id.toLowerCase() === pId?.toLowerCase() || p.title.toLowerCase().includes(pId?.toLowerCase() || ''));
+        if (match) {
+          setPreset(match.id);
+          return appendLog(`Loaded preset: ${match.title}`);
+        }
+        return appendLog(`Preset not found: ${pId}. Valid presets: ${PRESETS.map(p => p.id).join(', ')}`);
+      }
+
+      case 'fail':
+        if (args[0] === 'link') {
+          const lId = args[1];
+          const link = engineRef.current.links.find(l => l.id.toLowerCase() === lId?.toLowerCase());
+          if (link) {
+            engineRef.current.setLinkState(link.id, 'DOWN');
+            syncStateFromEngine();
+            return appendLog(`Link ${link.id} state set to DOWN (severed).`);
+          }
+          return appendLog(`Link ${lId} not found.`);
+        }
+        return appendLog('Usage: fail link <linkId>');
+
+      case 'restore':
+        if (args[0] === 'link') {
+          const lId = args[1];
+          const link = engineRef.current.links.find(l => l.id.toLowerCase() === lId?.toLowerCase());
+          if (link) {
+            engineRef.current.setLinkState(link.id, 'UP');
+            syncStateFromEngine();
+            return appendLog(`Link ${link.id} state set to UP (restored).`);
+          }
+          return appendLog(`Link ${lId} not found.`);
+        }
+        return appendLog('Usage: restore link <linkId>');
+
+      case 'send': {
+        const src = args[0];
+        const dst = args[1];
+        const count = parseInt(args[2] || '1', 10);
+        const trafficClass: TrafficClass = args[3]?.toUpperCase().includes('HIGH') ? 'CLASS_HIGH' : 'CLASS_BEST_EFFORT';
+        if (!src || !dst) {
+          return appendLog('Usage: send <src> <dst> [count] [class]');
+        }
+        sendTraffic(src, dst, count, trafficClass);
+        return appendLog(`Dispatched ${count} packet(s) [${trafficClass}] from ${src} to ${dst}.`);
+      }
+
+      case 'ping': {
+        const src = args[0];
+        const dst = args[1];
+        if (!src || !dst) return appendLog('Usage: ping <src> <dst>');
+        const devSrc = engineRef.current.devices.get(src);
+        const devDst = engineRef.current.devices.get(dst);
+        if (!devSrc || !devDst) return appendLog(`Device not found: ${!devSrc ? src : dst}`);
+        const res = engineRef.current.sendPacket(src, dst, 'CLASS_BEST_EFFORT');
+        if (!res || !res.path || res.path.length === 0 || res.status === 'dropped') {
+          return appendLog(`PING ${dst} (${devDst.ip || '0.0.0.0'}): Destination Host Unreachable. 100% packet loss.`);
+        }
+        const latencyMs = (res.path.length - 1) * 4.2 + (engineRef.current.pseudoRandom() * 1.5);
+        return appendLog(`64 bytes from ${devDst.ip || '0.0.0.0'}: icmp_seq=1 ttl=64 time=${latencyMs.toFixed(2)} ms (hops: ${res.path.join(' -> ')})`);
+      }
+
+      case 'traceroute': {
+        const src = args[0];
+        const dst = args[1];
+        if (!src || !dst) return appendLog('Usage: traceroute <src> <dst>');
+        const devSrc = engineRef.current.devices.get(src);
+        const devDst = engineRef.current.devices.get(dst);
+        if (!devSrc || !devDst) return appendLog(`Device not found: ${!devSrc ? src : dst}`);
+        const res = engineRef.current.sendPacket(src, dst, 'CLASS_BEST_EFFORT');
+        if (!res || !res.path || res.path.length === 0) return appendLog(`traceroute: no route from ${src} to ${dst}`);
+        let output = `traceroute to ${dst} (${devDst.ip || '0.0.0.0'}), 30 hops max:\n`;
+        res.path.forEach((nodeId: string, idx: number) => {
+          const dev = engineRef.current.devices.get(nodeId);
+          output += ` ${idx + 1}  ${nodeId} (${dev?.ip || '0.0.0.0'})  ${((idx + 1) * 3.5).toFixed(2)} ms\n`;
+        });
+        return appendLog(output.trimEnd());
+      }
+
+      case 'show': {
+        const sub = args[0]?.toLowerCase();
+        if (sub === 'route') {
+          const devId = args[1];
+          if (!devId) return appendLog('Usage: show route <deviceId>');
+          const dev = engineRef.current.devices.get(devId);
+          if (!dev) return appendLog(`Device ${devId} not found.`);
+          let tbl = `Routing Table for ${dev.name} (${dev.type}):\n`;
+          tbl += 'Destination        Gateway          Interface    Protocol\n';
+          tbl += '----------------------------------------------------------\n';
+          engineRef.current.devices.forEach(target => {
+            if (target.id === devId) return;
+            tbl += `${(target.ip || target.id).padEnd(18)} ${(target.gateway || 'Direct').padEnd(16)} Gi0/1        OSPF\n`;
+          });
+          return appendLog(tbl);
+        }
+        if (sub === 'links') {
+          let out = 'Interface / Link Summary Table:\n';
+          out += 'Link ID           Source -> Target    State   Queue   Cost\n';
+          out += '--------------------------------------------------------------------\n';
+          engineRef.current.links.forEach(l => {
+            out += `${l.id.padEnd(17)} ${(l.source + ' -> ' + l.target).padEnd(20)} ${l.state.padEnd(7)} ${(l.queue.length + '/' + l.queueLimit).padEnd(7)} ${l.cost}\n`;
+          });
+          return appendLog(out);
+        }
+        if (sub === 'queue') {
+          const linkId = args[1];
+          if (!linkId) return appendLog('Usage: show queue <linkId>');
+          const l = engineRef.current.links.find(x => x.id.toLowerCase() === linkId.toLowerCase());
+          if (!l) return appendLog(`Link ${linkId} not found.`);
+          return appendLog(`Queue for ${l.id}: ${l.queue.length}/${l.queueLimit} packets (${Math.round((l.queue.length / l.queueLimit) * 100)}% capacity)`);
+        }
+        if (sub === 'vlan') {
+          let vlanOut = 'VLAN Database / Subnet Allocation:\n';
+          vlanOut += 'VLAN ID  Name            Subnet           Gateway\n';
+          vlanOut += '--------------------------------------------------\n';
+          vlanOut += 'VLAN 10  Management      192.168.10.0/24  192.168.10.1\n';
+          vlanOut += 'VLAN 20  Faculty/Staff   192.168.20.0/24  192.168.20.1\n';
+          vlanOut += 'VLAN 30  Student Labs    192.168.30.0/24  192.168.30.1\n';
+          vlanOut += 'VLAN 40  Campus Web/Srv  192.168.40.0/24  192.168.40.1\n';
+          return appendLog(vlanOut);
+        }
+        if (sub === 'metrics') {
+          const m = engineRef.current.getMetrics();
+          const activeL = engineRef.current.links.filter(l => l.state === 'UP').length;
+          return appendLog(
+            `Metrics Summary at Tick ${engineRef.current.tick}:\n` +
+            `  Packets Generated: ${m.generated}\n` +
+            `  Packets Delivered: ${m.delivered}\n` +
+            `  Packets Dropped:   ${m.dropped}\n` +
+            `  Delivery Ratio:    ${m.deliveryPercentage.toFixed(1)}%\n` +
+            `  Loss Ratio:        ${m.lossPercentage.toFixed(1)}%\n` +
+            `  In Flight:         ${m.inFlight}\n` +
+            `  Active Links:      ${activeL}/${engineRef.current.links.length}`
+          );
+        }
+        return appendLog('Usage: show [route <device> | links | queue <link> | vlan | metrics]');
+      }
+
+      case 'qos':
+        if (args[0] === 'on') {
+          engineRef.current.qosEnabled = true;
+          setQosEnabled(true);
+          return appendLog('Quality of Service (QoS) Priority Queueing: ENABLED');
+        } else if (args[0] === 'off') {
+          engineRef.current.qosEnabled = false;
+          setQosEnabled(false);
+          return appendLog('Quality of Service (QoS) Priority Queueing: DISABLED (FIFO mode)');
+        }
+        return appendLog('Usage: qos on|off');
+
+      case 'export': {
+        const fmt = args[0]?.toLowerCase();
+        if (fmt === 'json') {
+          const blob = new Blob([JSON.stringify(engineRef.current.getMetrics(), null, 2)], { type: 'application/json' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `simulation-metrics-tick-${engineRef.current.tick}.json`;
+          a.click();
+          return appendLog('Exported engine metrics to JSON.');
+        }
+        return appendLog('Usage: export json (for NS-2 Tcl and trace, use NS-2 view tab buttons)');
+      }
+
+      case 'clear':
+        setTerminalLogs(['Screen cleared. Type "help" for commands.']);
+        return '';
+
+      default:
+        return appendLog(`Unknown command: "${cmd}". Type "help" for syntax.`);
+    }
+  }, [echoCommand, resetCurrent, stepOnce, setPreset, syncStateFromEngine, sendTraffic]);
+
   const updateDevicePosition = useCallback((id: string, x: number, y: number) => {
     const dev = engineRef.current.devices.get(id);
     if (dev) {
@@ -147,6 +385,18 @@ export const SimulationProvider: React.FC<{ children: React.ReactNode }> = ({ ch
       setDevices(Array.from(engineRef.current.devices.values()));
     }
   }, []);
+
+  const autoLayoutPreset = useCallback(() => {
+    // Reset positions to default preset positions cleanly
+    currentPreset.devices.forEach(defaultDev => {
+      const dev = engineRef.current.devices.get(defaultDev.id);
+      if (dev) {
+        dev.position = { ...defaultDev.position };
+      }
+    });
+    setDevices(Array.from(engineRef.current.devices.values()));
+    echoCommand('topology auto-layout applied');
+  }, [currentPreset, echoCommand]);
 
   // Tick execution interval loop
   useEffect(() => {
@@ -214,6 +464,9 @@ export const SimulationProvider: React.FC<{ children: React.ReactNode }> = ({ ch
         toggleQoS,
         activePath,
         updateDevicePosition,
+        terminalLogs,
+        executeCommand,
+        autoLayoutPreset,
       }}
     >
       {children}
@@ -226,3 +479,5 @@ export const useSimulation = () => {
   if (!ctx) throw new Error('useSimulation must be used within SimulationProvider');
   return ctx;
 };
+
+
