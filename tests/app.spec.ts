@@ -32,8 +32,7 @@ test.describe('Smart Adaptive Campus Network Simulator Overhaul E2E', () => {
     // Check Auto-Layout button
     await page.getByRole('button', { name: /Auto-Layout/i }).click();
 
-    // Check MiniMap and zoom display
-    await expect(page.locator('.react-flow__minimap')).toBeVisible();
+    // Check zoom display chip (minimap removed per user design request)
     await expect(page.locator('text=Zoom:')).toBeVisible();
   });
 
@@ -90,9 +89,9 @@ test.describe('Smart Adaptive Campus Network Simulator Overhaul E2E', () => {
     await page.getByRole('button', { name: 'Research' }).click();
     await expect(page.locator('text=Research & Academic Attribution')).toBeVisible();
 
-    // Rail navigation: Viva FAQ page
-    await page.getByRole('button', { name: 'Viva/FAQ' }).click();
-    await expect(page.locator('text=Professor FAQ & Evaluative Transparency')).toBeVisible();
+    // Rail navigation: FAQ page
+    await page.getByRole('button', { name: 'FAQ' }).click();
+    await expect(page.locator('text=Frequently Asked Questions')).toBeVisible();
   });
 });
 

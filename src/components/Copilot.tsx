@@ -59,7 +59,7 @@ export const Copilot: React.FC = () => {
       title: 'Optimal Steady-State Routing',
       what: `Operating under preset: ${currentPreset.title}.`,
       why: 'All physical links are UP and operational with minimal metric costs.',
-      consequence: `Current delivery rate: ${metrics.deliveryPercentage}%. Zero unmitigated buffer drops.`,
+      consequence: `Current delivery rate: ${metrics.generated === 0 ? '100% (Ready)' : `${metrics.deliveryPercentage}%`}. Zero unmitigated buffer drops.`,
       action: 'Try severing link L_SW1_SW4 or injecting traffic bursts to stress-test the topology.',
       isCritical: false,
     };
@@ -68,49 +68,49 @@ export const Copilot: React.FC = () => {
   const diag = generateDiagnosis();
 
   return (
-    <div className="bg-gradient-to-r from-blue-50/80 to-indigo-50/80 border border-blue-200 rounded-xl p-5 shadow-sm space-y-3">
+    <div className="bg-white dark:bg-[#121824] border border-stone-200/80 dark:border-slate-800 rounded-3xl p-5 shadow-sm space-y-3.5 transition-colors duration-200">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <div className="p-1.5 rounded-lg bg-blue-600 text-white">
+          <div className="p-2 rounded-xl bg-stone-100 dark:bg-slate-800 text-slate-800 dark:text-emerald-400">
             <Sparkles className="w-4 h-4" />
           </div>
           <div>
-            <h3 className="text-xs font-bold text-slate-800">Network Copilot Diagnostic</h3>
-            <span className="text-[10px] text-slate-500 font-mono">Deterministic State Analysis</span>
+            <h3 className="text-xs font-bold text-slate-900 dark:text-white">Network Copilot Diagnostic</h3>
+            <span className="text-[10px] text-slate-500 dark:text-slate-400 font-mono">Deterministic State Analysis</span>
           </div>
         </div>
         <EvidenceBadge type="Browser-simulated" />
       </div>
 
-      <div className="bg-white/90 backdrop-blur rounded-lg border border-blue-100 p-4 space-y-2 text-xs">
+      <div className="bg-stone-50/80 dark:bg-[#0B0F19]/90 backdrop-blur rounded-2xl border border-stone-200/60 dark:border-slate-800 p-4 space-y-2.5 text-xs text-slate-800 dark:text-slate-200">
         <div className="flex items-center gap-2">
           {diag.isCritical ? (
-            <AlertOctagon className="w-4 h-4 text-red-600 shrink-0" />
+            <AlertOctagon className="w-4 h-4 text-rose-600 shrink-0" />
           ) : (
-            <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+            <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
           )}
-          <span className="font-bold text-slate-800 text-sm">{diag.title}</span>
+          <span className="font-bold text-slate-900 dark:text-white text-sm">{diag.title}</span>
         </div>
 
-        <p className="text-slate-600 leading-relaxed">
-          <strong className="text-slate-700">Observation:</strong> {diag.what}
+        <p className="leading-relaxed">
+          <strong className="text-slate-900 dark:text-slate-100">Observation:</strong> {diag.what}
         </p>
 
-        <p className="text-slate-600 leading-relaxed">
-          <strong className="text-slate-700">Causality:</strong> {diag.why}
+        <p className="leading-relaxed">
+          <strong className="text-slate-900 dark:text-slate-100">Causality:</strong> {diag.why}
         </p>
 
-        <p className="text-slate-600 leading-relaxed">
-          <strong className="text-slate-700">Network Impact:</strong> {diag.consequence}
+        <p className="leading-relaxed">
+          <strong className="text-slate-900 dark:text-slate-100">Network Impact:</strong> {diag.consequence}
         </p>
 
-        <div className="mt-3 pt-2.5 border-t border-slate-100 flex items-center gap-2 text-blue-700 font-medium">
+        <div className="mt-3 pt-2.5 border-t border-slate-100 dark:border-slate-800 flex items-center gap-2 text-blue-700 dark:text-emerald-400 font-semibold">
           <ArrowRight className="w-3.5 h-3.5 shrink-0" />
           <span>Recommended Next Action: {diag.action}</span>
         </div>
 
         {isNerdMode && (
-          <div className="mt-2 pt-2 border-t border-dashed border-slate-200 text-[10px] font-mono text-slate-500">
+          <div className="mt-2 pt-2 border-t border-dashed border-slate-200 dark:border-slate-800 text-[10px] font-mono text-slate-400">
             Rules Evaluated: [dijkstra_path_cost, hsrp_role_state, link_oper_state, qos_buffer_priority, vlan_acl_rules]
           </div>
         )}

@@ -62,16 +62,18 @@ export const ProfessorFAQ: React.FC = () => {
   ];
 
   return (
-    <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm space-y-4">
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pb-3 border-b border-slate-200">
+    <div className="bg-white dark:bg-[#121824] border border-stone-200/80 dark:border-slate-800 rounded-2xl p-6 shadow-2xs space-y-4 text-slate-800 dark:text-slate-100 transition-colors duration-200">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pb-3 border-b border-stone-100 dark:border-slate-800">
         <div className="flex items-center gap-2">
-          <HelpCircle className="w-5 h-5 text-blue-600" />
+          <div className="p-2 rounded-xl bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-emerald-400">
+            <HelpCircle className="w-5 h-5" />
+          </div>
           <div>
-            <h2 className="text-sm font-bold text-slate-800">Professor FAQ & Evaluative Transparency</h2>
-            <p className="text-xs text-slate-500">12 critical evaluative questions and honest answers</p>
+            <h2 className="text-sm font-bold text-slate-900 dark:text-white">Frequently Asked Questions</h2>
+            <p className="text-xs text-slate-500 dark:text-slate-400">Common questions about simulation mechanics, protocols, and architecture</p>
           </div>
         </div>
-        <EvidenceBadge type="Calculated from recorded data" />
+        <EvidenceBadge type="Calculated from recorded data" compact />
       </div>
 
       <div className="space-y-2">
@@ -80,11 +82,11 @@ export const ProfessorFAQ: React.FC = () => {
           return (
             <div
               key={idx}
-              className="border border-slate-200 rounded-lg overflow-hidden transition-all"
+              className="border border-stone-200/80 dark:border-slate-800 rounded-xl overflow-hidden transition-all"
             >
               <button
                 onClick={() => setOpenIndex(isOpen ? null : idx)}
-                className="w-full text-left px-4 py-3 bg-slate-50 hover:bg-slate-100 flex items-center justify-between gap-2 text-xs font-semibold text-slate-800 transition-colors"
+                className="w-full text-left px-4 py-3.5 bg-stone-50 dark:bg-slate-900/80 hover:bg-stone-100 dark:hover:bg-slate-800/80 flex items-center justify-between gap-2 text-xs font-semibold text-slate-900 dark:text-white transition-colors"
               >
                 <span>{faq.q}</span>
                 {isOpen ? (
@@ -94,7 +96,7 @@ export const ProfessorFAQ: React.FC = () => {
                 )}
               </button>
               {isOpen && (
-                <div className="p-4 bg-white text-xs text-slate-600 leading-relaxed border-t border-slate-100 whitespace-pre-line">
+                <div className="p-4 bg-white dark:bg-[#0B0F19] text-xs text-slate-600 dark:text-slate-300 leading-relaxed border-t border-stone-100 dark:border-slate-800 whitespace-pre-line">
                   {faq.a}
                 </div>
               )}
@@ -103,10 +105,10 @@ export const ProfessorFAQ: React.FC = () => {
         })}
       </div>
 
-      <div className="p-3 bg-amber-50 rounded-lg border border-amber-200 flex items-start gap-2 text-xs text-amber-800">
-        <AlertCircle className="w-4 h-4 shrink-0 text-amber-600 mt-0.5" />
+      <div className="p-3.5 bg-stone-100 dark:bg-slate-900 rounded-xl border border-stone-200/80 dark:border-slate-800 flex items-start gap-2.5 text-xs text-slate-600 dark:text-slate-300">
+        <AlertCircle className="w-4 h-4 shrink-0 text-slate-500 dark:text-slate-400 mt-0.5" />
         <div>
-          <span className="font-semibold">Evaluator Note:</span> All answers above are binding constraints documented in <code className="font-mono text-amber-900">docs/professor-qa.md</code> and <code className="font-mono text-amber-900">AGENTS.md</code>.
+          <span className="font-semibold text-slate-800 dark:text-white">Simulation Mechanics:</span> All packet traversal, shortest-path calculation, and convergence delays execute deterministically in the client-side discrete-event engine with explicit causal drop tracing.
         </div>
       </div>
     </div>

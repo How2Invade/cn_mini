@@ -46,6 +46,9 @@ export class SimulationEngine {
   };
 
   private seed: number;
+  private eventCounter: number = 0;
+  private static readonly MAX_EVENTS = 500;
+  private static readonly MAX_PACKETS = 2000;
 
   constructor(devices: Device[], links: NetworkLink[], config?: EngineConfig) {
     this.seed = config?.seed ?? 42;
@@ -73,6 +76,7 @@ export class SimulationEngine {
   public reset(): void {
     this.tick = 0;
     this.events = [];
+    this.eventCounter = 0;
     this.packets = [];
     this.generatedCount = 0;
     this.deliveredCount = 0;
@@ -113,7 +117,7 @@ export class SimulationEngine {
     metadata?: Record<string, any>
   ): void {
     const event: SimulationEvent = {
-      id: `evt-${this.tick}-${this.events.length + 1}`,
+      id: `evt-${this.tick}-${++this.eventCounter}`,
       tick: this.tick,
       timestamp: new Date().toISOString(),
       type,
@@ -124,6 +128,9 @@ export class SimulationEngine {
       metadata,
     };
     this.events.unshift(event); // newest first for display
+    if (this.events.length > SimulationEngine.MAX_EVENTS) {
+      this.events.length = SimulationEngine.MAX_EVENTS;
+    }
   }
 
   public setLinkState(linkId: string, newState: LinkState): void {
@@ -170,6 +177,44 @@ export class SimulationEngine {
     }
   }
 
+  public setLinkCost(linkId: string, newCost: number): void {
+    const link = this.links.find(l => l.id === linkId);
+    if (!link) return;
+    link.cost = Math.max(1, newCost);
+    this.logEvent(
+      'LINK_UP',
+      'info',
+      `Link ${link.id} metric cost updated to ${link.cost}.`,
+      link.source,
+      link.target
+    );
+  }
+
+  /**
+   * Injects one tick's worth of the scenario's background workload.
+   * Deterministic: `rate` packets per call. When `mixClasses` is true the
+   * batch alternates CLASS_HIGH / CLASS_BEST_EFFORT so QoS effects are visible.
+   * Returns the packets created (dropped ones included).
+   */
+  public injectScenarioTraffic(params: {
+    source: string;
+    destination: string;
+    rate: number;
+    trafficClass: TrafficClass;
+    mixClasses?: boolean;
+  }): Packet[] {
+    const created: Packet[] = [];
+    const count = Math.max(1, Math.floor(params.rate));
+    for (let i = 0; i < count; i++) {
+      const cls: TrafficClass = params.mixClasses
+        ? (i % 2 === 0 ? 'CLASS_HIGH' : 'CLASS_BEST_EFFORT')
+        : params.trafficClass;
+      const pkt = this.sendPacket(params.source, params.destination, cls);
+      if (pkt) created.push(pkt);
+    }
+    return created;
+  }
+
   /**
    * Generates and injects a new packet
    */
@@ -199,6 +244,9 @@ export class SimulationEngine {
       status: 'created',
     };
     this.packets.push(pkt);
+    if (this.packets.length > SimulationEngine.MAX_PACKETS) {
+      this.packets.shift();
+    }
     this.recentPackets.push(pkt);
     if (this.recentPackets.length > 40) {
       this.recentPackets.shift();

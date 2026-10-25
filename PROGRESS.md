@@ -75,3 +75,26 @@
   - [x] Bento Analytics Upgrade: Big bold KPI deltas, Delivery Donut with hatched drop segment, per-link utilization bars, recovery timeline strip, sortable packet table
   - [x] Full-page Dedicated Views for Compare, Research/Attribution, and Help/FAQ
   - [x] Unit & Playwright Tests Validation and Zero Console Error Guarantee (11/11 Vitest, 12/12 Playwright passing)
+
+- [x] **Phase 8: Minimalist De-cluttering & Organic Warm Pill UI Overhaul**
+  - [x] Completely purged all emojis from buttons, rail navigation, drawers, command palette, and modal headers
+  - [x] Streamlined Top Bar into a cohesive, consolidated playback pill capsule and uncluttered controls
+  - [x] Defaulted bottom dock to a sleek, low-profile pill footer, expanding available canvas area by over 80%
+  - [x] Applied warm cream neutral canvas (`#F5F5EE`) with rounded 24px/32px pill cards, subtle borders, and clean typography
+- [x] **Phase 10: Pixel-Perfect Layout Alignment & Bento Grid Harmonization**
+  - [x] Unified Canvas Floating Controls: Docked `Ask Copilot` and `Legend ▼` into a single horizontal flex toolbar at `top-3 right-3` with exact `h-8.5 rounded-xl` dimensions and shared styling, eliminating disparate floating buttons and hardcoded `right-28` offsets.
+  - [x] Responsive Canvas Header: Prevented collision between `Campus Topology` title chip and `Legend` when the 352px `RightDrawer` is active.
+  - [x] TopBar Baseline Perfection: Standardized playback capsule and all tool buttons to uniform `h-8.5` (34px) with fixed `gap-2` and graceful responsive label collapsing, eliminating flex overflow and element overlap.
+  - [x] Bento Analytics Grid Overhaul: Standardized all 6 Row 1 KPI cards to uniform `h-[116px]` with identical padding, borders, and baseline-aligned numerals/badges. Fixed text overflow in `Recovery Delay` with clean `Steady` + `Convergence` pill. Standardized Row 2 cards to uniform `h-[360px]` with padded scrolling in `Per-Link Utilization` to eliminate clipped link rows.
+  - [x] Verified 100% passing test suites: 11/11 Vitest unit tests and 12/12 Playwright tests passing across Desktop, Laptop, and Mobile viewports.
+
+- [x] **Phase 12: Comprehensive Engine Workload, Search Navigation & UI Sizing Overhaul**
+  - [x] Simulation Engine Workload Injection: Fixed Run/Pause/Step where clicks previously only advanced the tick counter with 0 packets. Implemented `injectScenarioTraffic` and `runScenarioTick` so running active scenarios drives live packets along Dijkstra shortest paths, continuously animating links and updating live queues.
+  - [x] Search & Command Palette Upgrade: Expanded search to index all navigation views, dock tabs (NS-2 terminal, analytics, packet flow, event stream), all 8 presets, and all topology devices. Added Enter key selection, arrow key navigation, and automatic return to `simulator` canvas on jump.
+  - [x] Button Sizing & Touch Targets: Enlarged playback controls (40px+ height, prominent Play/Pause buttons, explicit labels for Step and Reset), bottom dock tabs, and terminal inputs, eliminating undersized buttons.
+  - [x] Live Link Flow Visuals: Active links now pulse with live packet counts (`X pkts`) and cyan animated dashed paths during execution.
+  - [x] Verified 100% Tests Passing: 11/11 Vitest unit tests and 12/12 Playwright cross-device E2E tests passing.
+
+
+
+

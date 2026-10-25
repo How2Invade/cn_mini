@@ -4,9 +4,7 @@
 
 @layer base {
   body {
-    background-color: #FFFFFF;
-    color: #172033;
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-family: 'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, sans-serif;
   }
 }
 
@@ -16,20 +14,37 @@
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #F7F9FC;
+  background: transparent;
 }
 ::-webkit-scrollbar-thumb {
   background: #CBD5E1;
-  border-radius: 3px;
+  border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #94A3B8;
 }
 
+.dark ::-webkit-scrollbar-thumb {
+  background: #334155;
+}
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
+
 /* React Flow canvas styling */
 .react-flow__background {
-  background-color: #FAFAFC;
+  background-color: transparent;
 }
 .react-flow__edge-path {
   stroke-width: 2.5;
+}
+
+/* Modern pill and card glow micro-animations */
+@keyframes pulse-subtle {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.85; transform: scale(1.02); }
+}
+
+.animate-pulse-subtle {
+  animation: pulse-subtle 2.5s infinite ease-in-out;
 }

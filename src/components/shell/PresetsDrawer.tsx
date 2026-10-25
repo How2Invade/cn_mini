@@ -2,6 +2,7 @@ import React from 'react';
 import { useSimulation } from '../../context/SimulationContext';
 import { PRESETS } from '../../simulation/presets';
 import { PresetConfig } from '../../simulation/types';
+import { Network, Zap, AlertTriangle, Activity, X } from 'lucide-react';
 
 interface PresetsDrawerProps {
   isOpen: boolean;
@@ -23,33 +24,43 @@ export const PresetsDrawer: React.FC<PresetsDrawerProps> = ({ isOpen, onClose })
     return (
       <div
         key={preset.id}
-        onClick={() => setPreset(preset.id)}
-        className={`p-3 rounded-xl border text-left cursor-pointer transition-all flex flex-col justify-between group ${
+        onClick={() => {
+          setPreset(preset.id);
+        }}
+        className={`p-4 rounded-2xl border text-left cursor-pointer transition-all flex flex-col justify-between group ${
           isActive
-            ? 'bg-blue-50/70 border-blue-400 shadow-sm ring-1 ring-blue-300'
-            : 'bg-white border-slate-200 hover:border-slate-300 hover:bg-slate-50/60'
+            ? 'bg-stone-50 dark:bg-slate-800/90 border-slate-900 dark:border-white shadow-sm ring-1 ring-slate-900/10 dark:ring-white/10'
+            : 'bg-white dark:bg-[#151D2C] border-stone-200/80 dark:border-slate-800/80 hover:border-slate-400 dark:hover:border-slate-600 hover:bg-stone-50/50'
         }`}
       >
         <div className="flex items-start justify-between gap-1">
           <div className="flex items-center gap-2">
-            <span className="text-base">
-              {preset.id.includes('baseline') ? '🏛️' : preset.id.includes('enhanced') ? '⚡' : preset.id.includes('failure') ? '💥' : '🚀'}
-            </span>
-            <h4 className="font-bold text-xs text-slate-900 group-hover:text-blue-600 transition">
+            <div className="p-1.5 rounded-xl bg-stone-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 shrink-0">
+              {preset.id.includes('baseline') ? (
+                <Network className="w-4 h-4" />
+              ) : preset.id.includes('enhanced') ? (
+                <Zap className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+              ) : preset.id.includes('failure') ? (
+                <AlertTriangle className="w-4 h-4 text-rose-500" />
+              ) : (
+                <Activity className="w-4 h-4 text-blue-500" />
+              )}
+            </div>
+            <h4 className="font-bold text-xs text-slate-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition">
               {preset.title}
             </h4>
           </div>
-          <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${tagColor}`}>
+          <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${tagColor}`}>
             {categoryTag}
           </span>
         </div>
 
-        <p className="text-[11px] text-slate-500 mt-1 line-clamp-2 leading-relaxed">
+        <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-2 line-clamp-2 leading-relaxed">
           {preset.description}
         </p>
 
-        <div className="mt-2.5 pt-2 border-t border-slate-100 flex items-center justify-between text-[11px]">
-          <span className="text-slate-400 font-mono">
+        <div className="mt-3 pt-2 border-t border-stone-100 dark:border-slate-800 flex items-center justify-between text-[11px]">
+          <span className="text-slate-400 font-mono text-[10px]">
             {preset.devices.length} Nodes · {preset.links.length} Trunks
           </span>
           {isActive && (
@@ -59,7 +70,7 @@ export const PresetsDrawer: React.FC<PresetsDrawerProps> = ({ isOpen, onClose })
                 resetCurrent();
               }}
               title="Reset counters and layout for this scenario"
-              className="text-blue-600 font-semibold hover:underline"
+              className="text-slate-900 dark:text-white font-bold hover:underline text-[11px]"
             >
               Reset
             </button>
@@ -70,23 +81,26 @@ export const PresetsDrawer: React.FC<PresetsDrawerProps> = ({ isOpen, onClose })
   };
 
   return (
-    <div className="w-72 bg-white border-r border-slate-200 flex flex-col h-full shrink-0 shadow-sm z-20 select-none">
+    <div className="w-72 sm:w-80 bg-[#FAF9F5] dark:bg-[#0F1420] border-r border-[#E8E8E2] dark:border-slate-800/80 flex flex-col h-full shrink-0 shadow-xl z-20 select-none transition-colors duration-200">
       {/* Header */}
-      <div className="p-3.5 border-b border-slate-200 flex items-center justify-between bg-slate-50/50">
+      <div className="p-4 border-b border-[#E8E8E2] dark:border-slate-800/80 flex items-center justify-between bg-white/70 dark:bg-[#0B0F19]/70 backdrop-blur">
         <div>
-          <h3 className="font-bold text-xs text-slate-800 uppercase tracking-wider">Network Scenarios</h3>
-          <p className="text-[11px] text-slate-500">Curated campus lab topologies</p>
+          <h3 className="font-bold text-xs text-slate-900 dark:text-white uppercase tracking-wider">
+            Network Scenarios
+          </h3>
+          <p className="text-[11px] text-slate-500 dark:text-slate-400">Curated campus lab topologies</p>
         </div>
         <button
           onClick={onClose}
-          className="text-slate-400 hover:text-slate-700 p-1 rounded-md text-xs hover:bg-slate-200/60"
+          aria-label="Close"
+          className="text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 p-1.5 rounded-xl hover:bg-stone-200/60 dark:hover:bg-slate-800 transition"
         >
-          ✕
+          <X className="w-4 h-4" />
         </button>
       </div>
 
-      {/* Preset Cards List */}
-      <div className="flex-1 overflow-y-auto p-3 space-y-4">
+      {/* Preset Cards List with Smooth Scroll */}
+      <div className="flex-1 overflow-y-auto p-4 space-y-4">
         {/* Category: Architectures */}
         <div>
           <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-2 px-1">
@@ -97,7 +111,9 @@ export const PresetsDrawer: React.FC<PresetsDrawerProps> = ({ isOpen, onClose })
               renderPresetCard(
                 p,
                 p.id.includes('baseline') ? 'Baseline' : 'Enhanced',
-                p.id.includes('baseline') ? 'bg-slate-100 text-slate-700' : 'bg-emerald-50 text-emerald-700'
+                p.id.includes('baseline')
+                  ? 'bg-stone-200/70 text-slate-700 dark:bg-slate-800 dark:text-slate-300'
+                  : 'bg-emerald-100/70 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300'
               )
             )}
           </div>
@@ -113,7 +129,9 @@ export const PresetsDrawer: React.FC<PresetsDrawerProps> = ({ isOpen, onClose })
               renderPresetCard(
                 p,
                 p.id.includes('failure') ? 'Failure Test' : 'Traffic Test',
-                p.id.includes('failure') ? 'bg-rose-50 text-rose-700' : 'bg-amber-50 text-amber-700'
+                p.id.includes('failure')
+                  ? 'bg-rose-100/70 text-rose-800 dark:bg-rose-950/60 dark:text-rose-300'
+                  : 'bg-amber-100/70 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300'
               )
             )}
           </div>
@@ -127,7 +145,11 @@ export const PresetsDrawer: React.FC<PresetsDrawerProps> = ({ isOpen, onClose })
             </span>
             <div className="space-y-2">
               {tests.map(p =>
-                renderPresetCard(p, 'Edge Case', 'bg-blue-50 text-blue-700')
+                renderPresetCard(
+                  p,
+                  'Edge Case',
+                  'bg-blue-100/70 text-blue-800 dark:bg-blue-950/60 dark:text-blue-300'
+                )
               )}
             </div>
           </div>

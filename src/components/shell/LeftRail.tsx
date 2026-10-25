@@ -1,13 +1,27 @@
 import React from 'react';
+import { useSimulation } from '../../context/SimulationContext';
+import {
+  Network,
+  Layers,
+  Activity,
+  Terminal,
+  Radio,
+  Compass,
+  Scale,
+  BookOpen,
+  HelpCircle,
+  Sun,
+  Moon
+} from 'lucide-react';
 
-export type RailSection = 'simulator' | 'comparison' | 'research' | 'faq';
+export type RailSection = 'simulator' | 'comparison' | 'research' | 'faq' | 'demo';
 
 interface LeftRailProps {
   currentSection: RailSection;
   setSection: (section: RailSection) => void;
   isPresetsOpen: boolean;
   setIsPresetsOpen: (open: boolean | ((prev: boolean) => boolean)) => void;
-  onOpenDockTab: (tab: 'analytics' | 'terminal' | 'packet_lane') => void;
+  onOpenDockTab: (tab: 'analytics' | 'terminal' | 'packet_lane' | 'event_log') => void;
 }
 
 export const LeftRail: React.FC<LeftRailProps> = ({
@@ -17,121 +31,179 @@ export const LeftRail: React.FC<LeftRailProps> = ({
   setIsPresetsOpen,
   onOpenDockTab
 }) => {
+  const { isDarkMode, toggleTheme } = useSimulation();
+
   return (
     <aside
-      className="w-16 bg-white border-r border-slate-200 flex flex-col items-center py-3 justify-between shrink-0 select-none z-30"
+      className="w-16 bg-[#F7F7F2] dark:bg-[#0B0F19] border-r border-[#E8E8E2] dark:border-slate-800/80 flex flex-col items-center py-4 justify-between shrink-0 select-none z-30 transition-colors duration-200"
       aria-label="Navigation Rail"
     >
-      {/* Top Brand & Core Views */}
-      <div className="flex flex-col items-center gap-3 w-full">
-        {/* Brand Mark */}
-        <div
-          title="Smart Adaptive Campus Network Simulator"
-          className="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold text-base shadow-sm shadow-blue-200 cursor-pointer mb-2"
+      {/* Top: Brand Mark & Main Nav */}
+      <div className="flex flex-col items-center gap-2 w-full px-2">
+        {/* Minimal Brand Mark */}
+        <button
           onClick={() => setSection('simulator')}
+          title="Smart Adaptive Campus Network Simulator"
+          className="w-12 h-12 rounded-2xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 flex items-center justify-center font-black text-sm tracking-tight shadow-sm hover:scale-105 active:scale-95 transition-all mb-3"
         >
           CN
-        </div>
+        </button>
 
         {/* Section 1: Simulator View */}
         <button
-          onClick={() => setSection('simulator')}
-          title="Topology & Interactive Simulator"
-          className={`w-11 h-11 rounded-xl flex flex-col items-center justify-center transition-all ${
-            currentSection === 'simulator'
-              ? 'bg-blue-50 text-blue-600 font-bold border border-blue-200 shadow-sm'
-              : 'text-slate-500 hover:text-slate-900 hover:bg-slate-100'
+          onClick={() => {
+            setSection('simulator');
+            setIsPresetsOpen(false);
+          }}
+          aria-label="Topology"
+          title="Campus Topology Canvas"
+          className={`w-full py-2.5 rounded-2xl flex flex-col items-center justify-center transition-all ${
+            currentSection === 'simulator' && !isPresetsOpen
+              ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm font-bold border border-slate-200/80 dark:border-slate-700'
+              : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5'
           }`}
         >
-          <span className="text-base">🌐</span>
-          <span className="text-[9px] mt-0.5 font-medium">Topology</span>
+          <Network className="w-5 h-5 stroke-[1.8]" />
+          <span className="text-[10px] mt-1 font-medium tracking-tight">Topology</span>
         </button>
 
         {/* Presets Drawer Toggle */}
         <button
-          onClick={() => setIsPresetsOpen(prev => !prev)}
+          onClick={() => {
+            setSection('simulator');
+            setIsPresetsOpen(prev => !prev);
+          }}
+          aria-label="Presets"
           title="Network Scenarios & Presets"
-          className={`w-11 h-11 rounded-xl flex flex-col items-center justify-center transition-all ${
-            isPresetsOpen
-              ? 'bg-slate-100 text-slate-900 font-bold border border-slate-300'
-              : 'text-slate-500 hover:text-slate-900 hover:bg-slate-100'
+          className={`w-full py-2.5 rounded-2xl flex flex-col items-center justify-center transition-all ${
+            currentSection === 'simulator' && isPresetsOpen
+              ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm font-bold border border-slate-200/80 dark:border-slate-700'
+              : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5'
           }`}
         >
-          <span className="text-base">🗂️</span>
-          <span className="text-[9px] mt-0.5 font-medium">Presets</span>
+          <Layers className="w-5 h-5 stroke-[1.8]" />
+          <span className="text-[10px] mt-1 font-medium tracking-tight">Presets</span>
         </button>
 
         {/* Direct Dock Shortcuts */}
         <button
-          onClick={() => onOpenDockTab('analytics')}
-          title="Analytics Bento Grid"
-          className="w-11 h-11 rounded-xl flex flex-col items-center justify-center text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition"
+          onClick={() => {
+            setIsPresetsOpen(false);
+            onOpenDockTab('analytics');
+          }}
+          aria-label="Metrics"
+          title="Analytics Grid"
+          className="w-full py-2.5 rounded-2xl flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5 transition-all"
         >
-          <span className="text-base">📊</span>
-          <span className="text-[9px] mt-0.5 font-medium">Metrics</span>
+          <Activity className="w-5 h-5 stroke-[1.8]" />
+          <span className="text-[10px] mt-1 font-medium tracking-tight">Metrics</span>
         </button>
 
         <button
-          onClick={() => onOpenDockTab('terminal')}
-          title="Interactive Terminal & NS-2"
-          className="w-11 h-11 rounded-xl flex flex-col items-center justify-center text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition"
+          onClick={() => {
+            setIsPresetsOpen(false);
+            onOpenDockTab('terminal');
+          }}
+          aria-label="Terminal"
+          title="Diagnostic Shell & NS-2 Generator"
+          className="w-full py-2.5 rounded-2xl flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5 transition-all"
         >
-          <span className="text-base">⌨️</span>
-          <span className="text-[9px] mt-0.5 font-medium">Terminal</span>
+          <Terminal className="w-5 h-5 stroke-[1.8]" />
+          <span className="text-[10px] mt-1 font-medium tracking-tight">Terminal</span>
         </button>
 
         <button
-          onClick={() => onOpenDockTab('packet_lane')}
+          onClick={() => {
+            setIsPresetsOpen(false);
+            onOpenDockTab('packet_lane');
+          }}
+          aria-label="Lanes"
           title="Packet Hop Lanes"
-          className="w-11 h-11 rounded-xl flex flex-col items-center justify-center text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition"
+          className="w-full py-2.5 rounded-2xl flex flex-col items-center justify-center text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5 transition-all"
         >
-          <span className="text-base">⇄</span>
-          <span className="text-[9px] mt-0.5 font-medium">Lanes</span>
+          <Radio className="w-5 h-5 stroke-[1.8]" />
+          <span className="text-[10px] mt-1 font-medium tracking-tight">Lanes</span>
+        </button>
+
+        <button
+          onClick={() => {
+            setIsPresetsOpen(false);
+            setSection('demo');
+          }}
+          aria-label="Lab Tour"
+          title="7-Step Guided Lab Tour"
+          className={`w-full py-2.5 rounded-2xl flex flex-col items-center justify-center transition-all ${
+            currentSection === 'demo'
+              ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm font-bold border border-slate-200/80 dark:border-slate-700'
+              : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5'
+          }`}
+        >
+          <Compass className="w-5 h-5 stroke-[1.8]" />
+          <span className="text-[10px] mt-1 font-medium tracking-tight">Lab Tour</span>
         </button>
       </div>
 
-      {/* Bottom Auxiliary Pages */}
-      <div className="flex flex-col items-center gap-2 w-full pt-3 border-t border-slate-100">
-        {/* Comparison Page */}
+      {/* Bottom: Auxiliary Pages & Theme Switcher */}
+      <div className="flex flex-col items-center gap-1.5 w-full px-2 pt-3 border-t border-[#E8E8E2] dark:border-slate-800/80">
         <button
-          onClick={() => setSection('comparison')}
+          onClick={() => {
+            setIsPresetsOpen(false);
+            setSection('comparison');
+          }}
+          aria-label="Compare"
           title="Baseline vs Enhanced Comparison"
-          className={`w-11 h-11 rounded-xl flex flex-col items-center justify-center transition-all ${
+          className={`w-full py-2 rounded-2xl flex flex-col items-center justify-center transition-all ${
             currentSection === 'comparison'
-              ? 'bg-blue-50 text-blue-600 font-bold border border-blue-200 shadow-sm'
-              : 'text-slate-500 hover:text-slate-900 hover:bg-slate-100'
+              ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm font-bold border border-slate-200/80 dark:border-slate-700'
+              : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5'
           }`}
         >
-          <span className="text-base">⚖️</span>
-          <span className="text-[9px] mt-0.5 font-medium">Compare</span>
+          <Scale className="w-4 h-4 stroke-[1.8]" />
+          <span className="text-[9px] mt-1 font-medium tracking-tight">Compare</span>
         </button>
 
-        {/* Research & Attribution */}
         <button
-          onClick={() => setSection('research')}
-          title="Research Methodology, Citations & NS-2 Mapping"
-          className={`w-11 h-11 rounded-xl flex flex-col items-center justify-center transition-all ${
+          onClick={() => {
+            setIsPresetsOpen(false);
+            setSection('research');
+          }}
+          aria-label="Research"
+          title="Academic Citations & NS-2 Architecture"
+          className={`w-full py-2 rounded-2xl flex flex-col items-center justify-center transition-all ${
             currentSection === 'research'
-              ? 'bg-blue-50 text-blue-600 font-bold border border-blue-200 shadow-sm'
-              : 'text-slate-500 hover:text-slate-900 hover:bg-slate-100'
+              ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm font-bold border border-slate-200/80 dark:border-slate-700'
+              : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5'
           }`}
         >
-          <span className="text-base">📚</span>
-          <span className="text-[9px] mt-0.5 font-medium">Research</span>
+          <BookOpen className="w-4 h-4 stroke-[1.8]" />
+          <span className="text-[9px] mt-1 font-medium tracking-tight">Research</span>
         </button>
 
-        {/* Professor Viva FAQ */}
         <button
-          onClick={() => setSection('faq')}
-          title="Viva Defense & Technical FAQ"
-          className={`w-11 h-11 rounded-xl flex flex-col items-center justify-center transition-all ${
+          onClick={() => {
+            setIsPresetsOpen(false);
+            setSection('faq');
+          }}
+          aria-label="FAQ"
+          title="Frequently Asked Questions"
+          className={`w-full py-2 rounded-2xl flex flex-col items-center justify-center transition-all ${
             currentSection === 'faq'
-              ? 'bg-blue-50 text-blue-600 font-bold border border-blue-200 shadow-sm'
-              : 'text-slate-500 hover:text-slate-900 hover:bg-slate-100'
+              ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm font-bold border border-slate-200/80 dark:border-slate-700'
+              : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5'
           }`}
         >
-          <span className="text-base">🎓</span>
-          <span className="text-[9px] mt-0.5 font-medium">Viva/FAQ</span>
+          <HelpCircle className="w-4 h-4 stroke-[1.8]" />
+          <span className="text-[9px] mt-1 font-medium tracking-tight">FAQ</span>
+        </button>
+
+        {/* Theme Toggle Pill */}
+        <button
+          onClick={toggleTheme}
+          aria-label="Toggle Theme"
+          title={isDarkMode ? 'Switch to Warm Light Mode' : 'Switch to Dark Mode'}
+          className="mt-1 w-10 h-10 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 flex items-center justify-center text-slate-700 dark:text-amber-400 hover:scale-105 active:scale-95 transition-all shadow-xs"
+        >
+          {isDarkMode ? <Sun className="w-4 h-4 stroke-[1.8]" /> : <Moon className="w-4 h-4 stroke-[1.8]" />}
         </button>
       </div>
     </aside>

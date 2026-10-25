@@ -25,9 +25,12 @@ interface SimulationContextType {
   speed: number;
   isNerdMode: boolean;
   isPresentationMode: boolean;
+  isDarkMode: boolean;
   selectedDeviceId: string | null;
   selectedLinkId: string | null;
   qosEnabled: boolean;
+  isCopilotOpen: boolean;
+  setIsCopilotOpen: (open: boolean) => void;
   // Actions
   toggleRun: () => void;
   stepOnce: () => void;
@@ -35,9 +38,12 @@ interface SimulationContextType {
   setSpeed: (speed: number) => void;
   toggleNerdMode: () => void;
   togglePresentationMode: () => void;
+  toggleTheme: () => void;
+  setTheme: (theme: 'light' | 'dark') => void;
   selectDevice: (id: string | null) => void;
   selectLink: (id: string | null) => void;
   toggleLinkState: (linkId: string) => void;
+  updateLinkCost: (linkId: string, newCost: number) => void;
   sendTraffic: (source: string, destination: string, count: number, trafficClass: TrafficClass) => void;
   toggleQoS: () => void;
   activePath: string[] | null;
@@ -45,7 +51,15 @@ interface SimulationContextType {
   terminalLogs: string[];
   executeCommand: (cmd: string) => string;
   autoLayoutPreset: () => void;
+  play: () => void;
+  pause: () => void;
+  isDraining: boolean;
+  requestedDockTab: DockRequest | null;
+  openDockTab: (tab: DockRequest) => void;
+  clearDockRequest: () => void;
 }
+
+export type DockRequest = 'analytics' | 'terminal' | 'packet_lane' | 'event_log';
 
 const SimulationContext = createContext<SimulationContextType | null>(null);
 
@@ -58,10 +72,48 @@ export const SimulationProvider: React.FC<{ children: React.ReactNode }> = ({ ch
   const [speed, setSpeedState] = useState(1); // 1x = 200ms per tick
   const [isNerdMode, setIsNerdMode] = useState(false);
   const [isPresentationMode, setIsPresentationMode] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('cn_theme');
+      if (saved) return saved === 'dark';
+      return true; // default to modern dark mode inspired by tasklab/fintech
+    }
+    return true;
+  });
   const [selectedDeviceId, setSelectedDeviceId] = useState<string | null>(null);
   const [selectedLinkId, setSelectedLinkId] = useState<string | null>(null);
   const [qosEnabled, setQosEnabled] = useState(false);
+  const [isCopilotOpen, setIsCopilotOpen] = useState(false);
   const [activePath, setActivePath] = useState<string[] | null>(null);
+  // When paused and the user sends manual traffic, the engine keeps ticking
+  // (without background workload) until those packets are delivered/dropped.
+  const [isDraining, setIsDraining] = useState(false);
+  const [requestedDockTab, setRequestedDockTab] = useState<DockRequest | null>(null);
+  const presetRef = useRef<PresetConfig>(PRESETS[1]);
+  useEffect(() => { presetRef.current = currentPreset; }, [currentPreset]);
+  const isRunningRef = useRef(false);
+  useEffect(() => { isRunningRef.current = isRunning; }, [isRunning]);
+
+  // Sync dark class with document element
+  useEffect(() => {
+    if (typeof document !== 'undefined') {
+      if (isDarkMode) {
+        document.documentElement.classList.add('dark');
+        localStorage.setItem('cn_theme', 'dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+        localStorage.setItem('cn_theme', 'light');
+      }
+    }
+  }, [isDarkMode]);
+
+  const toggleTheme = useCallback(() => {
+    setIsDarkMode(prev => !prev);
+  }, []);
+
+  const setTheme = useCallback((theme: 'light' | 'dark') => {
+    setIsDarkMode(theme === 'dark');
+  }, []);
 
   const [metrics, setMetrics] = useState<SimulationMetrics>(() => engineRef.current.getMetrics());
   const [events, setEvents] = useState<SimulationEvent[]>([]);
@@ -80,8 +132,10 @@ export const SimulationProvider: React.FC<{ children: React.ReactNode }> = ({ ch
 
   const setPreset = useCallback((presetId: string) => {
     const target = PRESETS.find(p => p.id === presetId) || PRESETS[1];
+    presetRef.current = target;
     setCurrentPresetState(target);
     setIsRunning(false);
+    setIsDraining(false);
     setSelectedDeviceId(null);
     setSelectedLinkId(null);
     setActivePath(null);
@@ -93,28 +147,71 @@ export const SimulationProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     syncStateFromEngine();
   }, [syncStateFromEngine]);
 
+  /**
+   * One "scenario tick": inject the preset's deterministic workload
+   * (rate packets from source to destination), then advance the engine.
+   */
+  const runScenarioTick = useCallback(() => {
+    const preset = presetRef.current;
+    const p = preset.defaultTrafficParams;
+    if (p) {
+      const created = engineRef.current.injectScenarioTraffic({
+        source: p.source,
+        destination: p.destination,
+        rate: p.rate,
+        trafficClass: p.trafficClass,
+        mixClasses: preset.id === 'preset-6-congestion-qos',
+      });
+      const routed = created.find(pkt => pkt.path.length > 1);
+      if (routed) setActivePath(routed.path);
+    }
+    engineRef.current.step();
+    syncStateFromEngine();
+  }, [syncStateFromEngine]);
+
+  const play = useCallback(() => {
+    setIsDraining(false);
+    setIsRunning(true);
+  }, []);
+
+  const pause = useCallback(() => {
+    setIsRunning(false);
+    setIsDraining(false);
+  }, []);
+
   const toggleRun = useCallback(() => {
+    setIsDraining(false);
     setIsRunning(prev => !prev);
   }, []);
 
   const stepOnce = useCallback(() => {
     setIsRunning(false);
-    engineRef.current.step();
-    syncStateFromEngine();
-  }, [syncStateFromEngine]);
+    setIsDraining(false);
+    runScenarioTick();
+  }, [runScenarioTick]);
 
   const resetCurrent = useCallback(() => {
+    const preset = presetRef.current;
     setIsRunning(false);
-    engineRef.current.loadTopology(currentPreset.devices, currentPreset.links);
+    setIsDraining(false);
+    engineRef.current.loadTopology(preset.devices, preset.links);
+    engineRef.current.reconvergenceDelayTicks = preset.reconvergenceDelayTicks;
+    engineRef.current.qosEnabled = preset.defaultTrafficParams?.qosEnabled ?? false;
+    setQosEnabled(engineRef.current.qosEnabled);
     setActivePath(null);
     syncStateFromEngine();
-  }, [currentPreset, syncStateFromEngine]);
+  }, [syncStateFromEngine]);
 
   const toggleLinkState = useCallback((linkId: string) => {
     const link = engineRef.current.links.find(l => l.id === linkId);
     if (!link) return;
     const newState: LinkState = link.state === 'UP' ? 'DOWN' : 'UP';
     engineRef.current.setLinkState(linkId, newState);
+    syncStateFromEngine();
+  }, [syncStateFromEngine]);
+
+  const updateLinkCost = useCallback((linkId: string, newCost: number) => {
+    engineRef.current.setLinkCost(linkId, newCost);
     syncStateFromEngine();
   }, [syncStateFromEngine]);
 
@@ -133,6 +230,9 @@ export const SimulationProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     }
     setActivePath(lastPath);
     syncStateFromEngine();
+    // If the clock is paused, keep ticking until these packets settle so the
+    // user actually sees them travel instead of sitting in a queue forever.
+    if (!isRunningRef.current) setIsDraining(true);
   }, [syncStateFromEngine]);
 
   const toggleQoS = useCallback(() => {
@@ -260,6 +360,7 @@ export const SimulationProvider: React.FC<{ children: React.ReactNode }> = ({ ch
         const devDst = engineRef.current.devices.get(dst);
         if (!devSrc || !devDst) return appendLog(`Device not found: ${!devSrc ? src : dst}`);
         const res = engineRef.current.sendPacket(src, dst, 'CLASS_BEST_EFFORT');
+        if (!isRunningRef.current) setIsDraining(true);
         if (!res || !res.path || res.path.length === 0 || res.status === 'dropped') {
           return appendLog(`PING ${dst} (${devDst.ip || '0.0.0.0'}): Destination Host Unreachable. 100% packet loss.`);
         }
@@ -275,6 +376,7 @@ export const SimulationProvider: React.FC<{ children: React.ReactNode }> = ({ ch
         const devDst = engineRef.current.devices.get(dst);
         if (!devSrc || !devDst) return appendLog(`Device not found: ${!devSrc ? src : dst}`);
         const res = engineRef.current.sendPacket(src, dst, 'CLASS_BEST_EFFORT');
+        if (!isRunningRef.current) setIsDraining(true);
         if (!res || !res.path || res.path.length === 0) return appendLog(`traceroute: no route from ${src} to ${dst}`);
         let output = `traceroute to ${dst} (${devDst.ip || '0.0.0.0'}), 30 hops max:\n`;
         res.path.forEach((nodeId: string, idx: number) => {
@@ -369,6 +471,37 @@ export const SimulationProvider: React.FC<{ children: React.ReactNode }> = ({ ch
         return appendLog('Usage: export json (for NS-2 Tcl and trace, use NS-2 view tab buttons)');
       }
 
+      case 'speed': {
+        const val = parseFloat(args[0]);
+        if (!isNaN(val) && val > 0) {
+          setSpeedState(val);
+          return appendLog(`Simulation playback speed set to ${val}x.`);
+        }
+        return appendLog('Usage: speed <multiplier> (e.g. speed 0.5, speed 1, speed 2, speed 5)');
+      }
+
+      case 'cost': {
+        const lId = args[0];
+        const val = parseInt(args[1], 10);
+        if (!lId || isNaN(val)) return appendLog('Usage: cost <linkId> <newMetricCost>');
+        updateLinkCost(lId, val);
+        return appendLog(`Link ${lId} metric cost updated to ${val}. Dijkstra shortest path recalculated.`);
+      }
+
+      case 'theme': {
+        const mode = args[0]?.toLowerCase();
+        if (mode === 'dark') {
+          setIsDarkMode(true);
+          return appendLog('Theme switched to Dark mode.');
+        } else if (mode === 'light') {
+          setIsDarkMode(false);
+          return appendLog('Theme switched to Light mode.');
+        } else {
+          setIsDarkMode(prev => !prev);
+          return appendLog('Toggled UI theme.');
+        }
+      }
+
       case 'clear':
         setTerminalLogs(['Screen cleared. Type "help" for commands.']);
         return '';
@@ -398,25 +531,37 @@ export const SimulationProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     echoCommand('topology auto-layout applied');
   }, [currentPreset, echoCommand]);
 
-  // Tick execution interval loop
+  // Tick execution interval loop.
+  // Running  -> each tick injects the preset workload and advances the engine.
+  // Draining -> paused, but manually-sent packets are still in flight: advance
+  //             the engine (no new workload) until they are delivered/dropped.
   useEffect(() => {
-    if (!isRunning) return;
+    if (!isRunning && !isDraining) return;
 
     const intervalMs = Math.max(50, Math.round(250 / speed));
+    let drainTicks = 0;
     const intervalId = setInterval(() => {
+      if (isRunning) {
+        runScenarioTick();
+        return;
+      }
       engineRef.current.step();
       syncStateFromEngine();
+      const m = engineRef.current.getMetrics();
+      drainTicks++;
+      if (m.inFlight <= 0 || drainTicks > 100) setIsDraining(false);
     }, intervalMs);
 
     return () => clearInterval(intervalId);
-  }, [isRunning, speed, syncStateFromEngine]);
+  }, [isRunning, isDraining, speed, runScenarioTick, syncStateFromEngine]);
 
   // Global Keyboard Shortcuts for Presentation & Lab Mode
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (['INPUT', 'SELECT', 'TEXTAREA'].includes((e.target as HTMLElement)?.tagName)) {
+      if (['INPUT', 'SELECT', 'TEXTAREA', 'BUTTON'].includes((e.target as HTMLElement)?.tagName)) {
         return;
       }
+      if (e.metaKey || e.ctrlKey || e.altKey) return;
       if (e.code === 'Space') {
         e.preventDefault();
         toggleRun();
@@ -424,8 +569,8 @@ export const SimulationProvider: React.FC<{ children: React.ReactNode }> = ({ ch
         resetCurrent();
       } else if (e.key === 'm' || e.key === 'M') {
         setIsNerdMode(prev => !prev);
-      } else if (e.key === 'p' || e.key === 'P') {
-        setIsPresentationMode(prev => !prev);
+      } else if (e.key === 'Escape') {
+        setIsPresentationMode(false);
       }
     };
 
@@ -448,18 +593,30 @@ export const SimulationProvider: React.FC<{ children: React.ReactNode }> = ({ ch
         speed,
         isNerdMode,
         isPresentationMode,
+        isDarkMode,
         selectedDeviceId,
         selectedLinkId,
         qosEnabled,
+        isCopilotOpen,
+        setIsCopilotOpen,
         toggleRun,
         stepOnce,
         resetCurrent,
         setSpeed: setSpeedState,
         toggleNerdMode: () => setIsNerdMode(prev => !prev),
         togglePresentationMode: () => setIsPresentationMode(prev => !prev),
-        selectDevice: setSelectedDeviceId,
-        selectLink: setSelectedLinkId,
+        toggleTheme,
+        setTheme,
+        selectDevice: (id: string | null) => {
+          setSelectedDeviceId(id);
+          if (id) setSelectedLinkId(null);
+        },
+        selectLink: (id: string | null) => {
+          setSelectedLinkId(id);
+          if (id) setSelectedDeviceId(null);
+        },
         toggleLinkState,
+        updateLinkCost,
         sendTraffic,
         toggleQoS,
         activePath,
@@ -467,6 +624,12 @@ export const SimulationProvider: React.FC<{ children: React.ReactNode }> = ({ ch
         terminalLogs,
         executeCommand,
         autoLayoutPreset,
+        play,
+        pause,
+        isDraining,
+        requestedDockTab,
+        openDockTab: setRequestedDockTab,
+        clearDockRequest: () => setRequestedDockTab(null),
       }}
     >
       {children}

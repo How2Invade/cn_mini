@@ -3,6 +3,7 @@ import { AnalyticsBento } from './AnalyticsBento';
 import { TerminalPanel } from './TerminalPanel';
 import { PacketLanePanel } from './PacketLanePanel';
 import { EventLog } from '../EventLog';
+import { Activity, Terminal, Radio, ScrollText, ChevronUp, ChevronDown, Maximize2, Minimize2 } from 'lucide-react';
 
 export type DockTabId = 'analytics' | 'terminal' | 'packet_lane' | 'event_log';
 
@@ -23,25 +24,24 @@ export const BottomDock: React.FC<BottomDockProps> = ({
 
   return (
     <div
-      className={`bg-white border-t border-slate-200 transition-all duration-300 flex flex-col shadow-lg z-20 ${
-        !isOpen ? 'h-10' : isMaximized ? 'h-[75vh]' : 'h-80'
+      className={`bg-white dark:bg-[#101622] border-t border-[#E8E8E2] dark:border-slate-800 transition-all duration-300 flex flex-col shadow-xl z-20 ${
+        !isOpen ? 'h-14' : isMaximized ? 'h-[75vh]' : 'h-80'
       }`}
     >
-      {/* Dock Header Tabs bar */}
-      <div className="flex items-center justify-between px-3 h-10 border-b border-slate-200 bg-slate-50/80 shrink-0">
-        <div className="flex items-center gap-1">
+      <div className="flex items-center justify-between px-4 h-14 border-b border-[#E8E8E2] dark:border-slate-800 bg-[#F7F7F2] dark:bg-[#0B0F19] shrink-0">
+        <div className="flex items-center gap-2 overflow-x-auto min-w-0 mr-2 py-1 select-none">
           <button
             onClick={() => {
               setActiveTab('analytics');
               setIsOpen(true);
             }}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all ${
+            className={`h-10 px-4 rounded-xl text-sm font-bold flex items-center gap-2 transition-all shrink-0 ${
               isOpen && activeTab === 'analytics'
-                ? 'bg-white text-blue-600 shadow-sm border border-slate-200'
-                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+                ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-xs border border-slate-200/80 dark:border-slate-700'
+                : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5'
             }`}
           >
-            <span>📊</span>
+            <Activity className="w-4 h-4 text-indigo-500" />
             <span>Analytics Grid</span>
           </button>
 
@@ -50,13 +50,13 @@ export const BottomDock: React.FC<BottomDockProps> = ({
               setActiveTab('terminal');
               setIsOpen(true);
             }}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all ${
+            className={`h-10 px-4 rounded-xl text-sm font-bold flex items-center gap-2 transition-all shrink-0 ${
               isOpen && activeTab === 'terminal'
-                ? 'bg-white text-blue-600 shadow-sm border border-slate-200'
-                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+                ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-xs border border-slate-200/80 dark:border-slate-700'
+                : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5'
             }`}
           >
-            <span>⌨️</span>
+            <Terminal className="w-4 h-4 text-emerald-500" />
             <span>Terminal & NS-2</span>
           </button>
 
@@ -65,13 +65,13 @@ export const BottomDock: React.FC<BottomDockProps> = ({
               setActiveTab('packet_lane');
               setIsOpen(true);
             }}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all ${
+            className={`h-10 px-4 rounded-xl text-sm font-bold flex items-center gap-2 transition-all shrink-0 ${
               isOpen && activeTab === 'packet_lane'
-                ? 'bg-white text-blue-600 shadow-sm border border-slate-200'
-                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+                ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-xs border border-slate-200/80 dark:border-slate-700'
+                : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5'
             }`}
           >
-            <span>⇄</span>
+            <Radio className="w-4 h-4 text-cyan-500" />
             <span>Packet Lane</span>
           </button>
 
@@ -80,42 +80,44 @@ export const BottomDock: React.FC<BottomDockProps> = ({
               setActiveTab('event_log');
               setIsOpen(true);
             }}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all ${
+            className={`h-10 px-4 rounded-xl text-sm font-bold flex items-center gap-2 transition-all shrink-0 ${
               isOpen && activeTab === 'event_log'
-                ? 'bg-white text-blue-600 shadow-sm border border-slate-200'
-                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+                ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-xs border border-slate-200/80 dark:border-slate-700'
+                : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5'
             }`}
           >
-            <span>📋</span>
+            <ScrollText className="w-4 h-4 text-slate-500" />
             <span>Event Stream</span>
           </button>
         </div>
 
         {/* Controls: Maximize & Collapse */}
-        <div className="flex items-center gap-1.5">
+        <div className="flex items-center gap-2 shrink-0">
           {isOpen && (
             <button
               onClick={() => setIsMaximized(prev => !prev)}
-              title={isMaximized ? 'Restore dock height' : 'Maximize dock'}
-              className="p-1.5 text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded text-xs font-mono"
+              title={isMaximized ? 'Restore height' : 'Maximize dock'}
+              className="h-10 px-3.5 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition"
             >
-              {isMaximized ? '⤓ Restore' : '⤒ Maximize'}
+              {isMaximized ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
+              <span className="hidden sm:inline">{isMaximized ? 'Restore' : 'Maximize'}</span>
             </button>
           )}
 
           <button
             onClick={() => setIsOpen(!isOpen)}
             title={isOpen ? 'Collapse dock' : 'Expand dock'}
-            className="p-1.5 text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded text-xs font-mono"
+            className="h-10 px-3.5 bg-white dark:bg-slate-800 border border-stone-200/80 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:text-slate-950 dark:hover:text-white hover:bg-stone-50 dark:hover:bg-slate-700/80 rounded-xl text-xs font-bold flex items-center gap-1.5 transition shadow-xs"
           >
-            {isOpen ? '▼ Hide' : '▲ Open Dock'}
+            {isOpen ? <ChevronDown className="w-4 h-4" /> : <ChevronUp className="w-4 h-4" />}
+            <span>{isOpen ? 'Collapse' : 'Expand'}</span>
           </button>
         </div>
       </div>
 
       {/* Dock Content Body */}
       {isOpen && (
-        <div className="flex-1 overflow-hidden">
+        <div className="flex-1 overflow-hidden min-h-0">
           {activeTab === 'analytics' && <AnalyticsBento />}
           {activeTab === 'terminal' && <TerminalPanel />}
           {activeTab === 'packet_lane' && <PacketLanePanel />}

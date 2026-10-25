@@ -1,83 +1,75 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSimulation } from '../../context/SimulationContext';
 import { Inspectors } from '../Inspectors';
 import { Copilot } from '../Copilot';
+import { X, SlidersHorizontal, Bot } from 'lucide-react';
 
 export const RightDrawer: React.FC = () => {
-  const { selectedDeviceId, selectedLinkId, selectDevice, selectLink } = useSimulation();
+  const { selectedDeviceId, selectedLinkId, selectDevice, selectLink, isCopilotOpen, setIsCopilotOpen } = useSimulation();
   const [activeTab, setActiveTab] = useState<'inspector' | 'copilot'>('inspector');
 
   const hasSelection = Boolean(selectedDeviceId || selectedLinkId);
+  const isOpen = hasSelection || isCopilotOpen;
 
-  // If nothing is selected and user hasn't explicitly opened Copilot, stay collapsed to free up canvas space
-  const [forceOpenCopilot, setForceOpenCopilot] = useState(false);
-
-  const isOpen = hasSelection || forceOpenCopilot;
+  useEffect(() => {
+    if (isCopilotOpen && !hasSelection) {
+      setActiveTab('copilot');
+    }
+  }, [isCopilotOpen, hasSelection]);
 
   if (!isOpen) {
-    return (
-      <div className="absolute top-4 right-4 z-10 flex flex-col items-end gap-2">
-        <button
-          onClick={() => {
-            setForceOpenCopilot(true);
-            setActiveTab('copilot');
-          }}
-          className="bg-white/95 backdrop-blur border border-slate-200 shadow-md text-blue-600 font-bold px-3 py-1.5 rounded-xl text-xs hover:bg-blue-50 transition flex items-center gap-1.5"
-        >
-          <span>🤖</span>
-          <span>Ask Copilot</span>
-        </button>
-      </div>
-    );
+    return null;
   }
 
   const handleClose = () => {
     selectDevice(null);
     selectLink(null);
-    setForceOpenCopilot(false);
+    setIsCopilotOpen(false);
   };
 
   return (
     <aside
-      className="w-84 bg-white/95 backdrop-blur border-l border-slate-200 h-full flex flex-col shrink-0 shadow-lg z-20 transition-all select-none"
+      className="w-88 bg-white/95 dark:bg-[#101622]/95 backdrop-blur-md border-l border-[#E8E8E2] dark:border-slate-800 h-full flex flex-col shrink-0 shadow-2xl z-20 transition-all select-none"
       aria-label="Inspector and Copilot Drawer"
     >
       {/* Header Tabs */}
-      <div className="flex items-center justify-between px-3 h-11 border-b border-slate-200 bg-slate-50/70">
-        <div className="flex items-center gap-1">
+      <div className="flex items-center justify-between px-3.5 h-14 border-b border-[#E8E8E2] dark:border-slate-800 bg-[#F7F7F2] dark:bg-[#0B0F19]">
+        <div className="flex items-center gap-1.5">
           <button
             onClick={() => setActiveTab('inspector')}
-            className={`px-3 py-1 rounded-md text-xs font-semibold transition ${
+            className={`px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition ${
               activeTab === 'inspector'
-                ? 'bg-white text-blue-600 shadow-xs border border-slate-200'
-                : 'text-slate-600 hover:text-slate-900'
+                ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-xs border border-slate-200/80 dark:border-slate-700'
+                : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5'
             }`}
           >
-            {selectedDeviceId ? 'Device Details' : selectedLinkId ? 'Link Details' : 'Inspector'}
+            <SlidersHorizontal className="w-3.5 h-3.5" />
+            <span>{selectedDeviceId ? 'Device Details' : selectedLinkId ? 'Link Details' : 'Inspector'}</span>
           </button>
           <button
             onClick={() => setActiveTab('copilot')}
-            className={`px-3 py-1 rounded-md text-xs font-semibold transition ${
+            className={`px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition ${
               activeTab === 'copilot'
-                ? 'bg-white text-blue-600 shadow-xs border border-slate-200'
-                : 'text-slate-600 hover:text-slate-900'
+                ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-xs border border-slate-200/80 dark:border-slate-700'
+                : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5'
             }`}
           >
-            Network Copilot
+            <Bot className="w-3.5 h-3.5" />
+            <span>Network Copilot</span>
           </button>
         </div>
 
         <button
           onClick={handleClose}
           title="Close Inspector drawer"
-          className="text-slate-400 hover:text-slate-700 p-1 rounded-md text-xs hover:bg-slate-200/60"
+          className="text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 p-1.5 rounded-xl text-xs hover:bg-black/5 dark:hover:bg-white/5 transition"
         >
-          ✕
+          <X className="w-4 h-4" />
         </button>
       </div>
 
-      {/* Content View */}
-      <div className="flex-1 overflow-y-auto p-3">
+      {/* Content View with smooth scroll */}
+      <div className="flex-1 overflow-y-auto p-4">
         {activeTab === 'inspector' ? (
           <Inspectors />
         ) : (
