@@ -13,8 +13,8 @@ Built as our **Computer Networks (CN) mini project** at Fr. Conceicao Rodrigues 
 | Name | Roll No. |
 |---|---|
 | Meet Navin Mangaonkar | 10616 |
-| Yash Masaye | 10617 |
-| Sanika | 10613 |
+| Yash Ramchandra Masaye | 10617 |
+| Sanika Oswald Lobo | 10613 |
 
 TE Computer Engineering, Fr. CRCE, Mumbai
 
