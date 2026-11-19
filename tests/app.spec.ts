@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-test.describe('Smart Adaptive Campus Network Simulator Overhaul E2E', () => {
+test.describe('Redundant Data Center Campus Network Overhaul E2E', () => {
   test.beforeEach(async ({ page }) => {
     // Monitor console errors
     page.on('console', msg => {
@@ -9,7 +9,7 @@ test.describe('Smart Adaptive Campus Network Simulator Overhaul E2E', () => {
       }
     });
     await page.goto('http://localhost:4173');
-    await expect(page).toHaveTitle(/Smart Adaptive Campus Network Simulator/);
+    await expect(page).toHaveTitle(/Redundant Data Center Campus Network/);
   });
 
   test('Shell layout, rail navigation, and presets drawer', async ({ page }) => {

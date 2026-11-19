@@ -378,14 +378,14 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
 
   return (
     <div
-      className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-start justify-center pt-20 z-50 p-4 transition-all"
+      className="fixed inset-0 bg-black/50 flex items-start justify-center pt-20 z-50 p-4 transition-all"
       onClick={e => {
         if (e.target === e.currentTarget) onClose();
       }}
     >
-      <div className="bg-white dark:bg-[#121824] rounded-3xl shadow-2xl border border-stone-200/90 dark:border-slate-800 w-full max-w-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-150 text-slate-800 dark:text-slate-100 flex flex-col max-h-[75vh]">
+      <div className="bg-paper-raised dark:bg-ink-raised rounded-3xl shadow-2xl border border-stone-200/90 dark:border-slate-800 w-full max-w-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-150 text-slate-800 dark:text-slate-100 flex flex-col max-h-[75vh]">
         {/* Search Input Bar */}
-        <div className="p-4 border-b border-stone-200/80 dark:border-slate-800 flex items-center gap-3 bg-[#FAF9F5] dark:bg-[#0B0F19] shrink-0">
+        <div className="p-4 border-b border-paper-line dark:border-slate-800 flex items-center gap-3 bg-[#FBFAF6] dark:bg-[#121315] shrink-0">
           <Search className="w-5 h-5 text-slate-400 shrink-0" />
           <input
             ref={inputRef}
@@ -399,7 +399,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
             placeholder="Type a command, page, NS-2 terminal, scenario, or device (e.g. SW1, terminal, failure)..."
             className="flex-1 text-base outline-none text-slate-900 dark:text-white placeholder-slate-400 bg-transparent font-medium"
           />
-          <kbd className="text-xs font-mono bg-white dark:bg-slate-800 text-slate-500 dark:text-slate-400 px-2 py-1 rounded-lg border border-stone-200 dark:border-slate-700 shadow-xs">
+          <kbd className="text-xs font-mono bg-paper-raised dark:bg-slate-800 text-slate-500 dark:text-slate-400 px-2 py-1 rounded-lg border border-stone-200 dark:border-slate-700 shadow-xs">
             ESC
           </kbd>
         </div>
@@ -420,15 +420,15 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
                 }`}
               >
                 <div className="flex items-center gap-3 min-w-0">
-                  <div className="p-2 rounded-xl bg-white dark:bg-slate-900 border border-stone-200/60 dark:border-slate-700/60 shrink-0">
+                  <div className="p-2 rounded-xl bg-paper-raised dark:bg-slate-900 border border-stone-200/60 dark:border-slate-700/60 shrink-0">
                     {item.icon}
                   </div>
                   <div className="min-w-0">
                     <div className="flex items-center gap-2">
-                      <span className="font-bold text-sm text-slate-900 dark:text-white truncate">
+                      <span className="font-semibold text-sm text-slate-900 dark:text-white truncate">
                         {item.title}
                       </span>
-                      <span className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-stone-100 dark:bg-slate-900/80 text-slate-500 dark:text-slate-400 border border-stone-200/60 dark:border-slate-800 shrink-0">
+                      <span className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-sm bg-stone-100 dark:bg-slate-900/80 text-slate-500 dark:text-slate-400 border border-stone-200/60 dark:border-slate-800 shrink-0">
                         {item.category}
                       </span>
                     </div>
@@ -462,10 +462,10 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
         </div>
 
         {/* Footer Navigation Hints */}
-        <div className="px-4 py-2.5 border-t border-stone-200/80 dark:border-slate-800 bg-[#FAF9F5] dark:bg-[#0B0F19] text-xs text-slate-500 dark:text-slate-400 flex items-center justify-between shrink-0">
+        <div className="px-4 py-2.5 border-t border-paper-line dark:border-slate-800 bg-[#FBFAF6] dark:bg-[#121315] text-xs text-slate-500 dark:text-slate-400 flex items-center justify-between shrink-0">
           <div className="flex items-center gap-3">
-            <span><kbd className="font-mono px-1.5 py-0.5 bg-white dark:bg-slate-800 rounded border border-stone-200 dark:border-slate-700 text-[10px]">↑</kbd> <kbd className="font-mono px-1.5 py-0.5 bg-white dark:bg-slate-800 rounded border border-stone-200 dark:border-slate-700 text-[10px]">↓</kbd> Navigate</span>
-            <span><kbd className="font-mono px-1.5 py-0.5 bg-white dark:bg-slate-800 rounded border border-stone-200 dark:border-slate-700 text-[10px]">↵</kbd> Select</span>
+            <span><kbd className="font-mono px-1.5 py-0.5 bg-paper-raised dark:bg-slate-800 rounded border border-stone-200 dark:border-slate-700 text-[10px]">↑</kbd> <kbd className="font-mono px-1.5 py-0.5 bg-paper-raised dark:bg-slate-800 rounded border border-stone-200 dark:border-slate-700 text-[10px]">↓</kbd> Navigate</span>
+            <span><kbd className="font-mono px-1.5 py-0.5 bg-paper-raised dark:bg-slate-800 rounded border border-stone-200 dark:border-slate-700 text-[10px]">↵</kbd> Select</span>
           </div>
           <span className="font-mono text-[11px]">{filteredItems.length} available</span>
         </div>

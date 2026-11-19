@@ -244,7 +244,7 @@ export const SimulationProvider: React.FC<{ children: React.ReactNode }> = ({ ch
   }, []);
 
   const [terminalLogs, setTerminalLogs] = useState<string[]>([
-    'Smart Adaptive Campus Network Simulator diagnostic shell initialized.',
+    'Redundant DC Campus Network diagnostic shell initialized.',
     'Engine ready. Type "help" for available commands.',
     'Preset loaded: ' + PRESETS[1].title
   ]);

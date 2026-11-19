@@ -29,17 +29,17 @@ export const RightDrawer: React.FC = () => {
 
   return (
     <aside
-      className="w-88 bg-white/95 dark:bg-[#101622]/95 backdrop-blur-md border-l border-[#E8E8E2] dark:border-slate-800 h-full flex flex-col shrink-0 shadow-2xl z-20 transition-all select-none"
+      className="w-88 bg-paper-raised dark:bg-[#141517]/95 border-l border-paper-line dark:border-ink-line h-full flex flex-col shrink-0 shadow-2xl z-20 transition-all select-none"
       aria-label="Inspector and Copilot Drawer"
     >
       {/* Header Tabs */}
-      <div className="flex items-center justify-between px-3.5 h-14 border-b border-[#E8E8E2] dark:border-slate-800 bg-[#F7F7F2] dark:bg-[#0B0F19]">
+      <div className="flex items-center justify-between px-3.5 h-14 border-b border-paper-line dark:border-ink-line bg-paper dark:bg-ink">
         <div className="flex items-center gap-1.5">
           <button
             onClick={() => setActiveTab('inspector')}
             className={`px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition ${
               activeTab === 'inspector'
-                ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-xs border border-slate-200/80 dark:border-slate-700'
+                ? 'bg-paper-raised dark:bg-slate-800 text-slate-900 dark:text-white shadow-xs border border-slate-200/80 dark:border-slate-700'
                 : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5'
             }`}
           >
@@ -50,7 +50,7 @@ export const RightDrawer: React.FC = () => {
             onClick={() => setActiveTab('copilot')}
             className={`px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition ${
               activeTab === 'copilot'
-                ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-xs border border-slate-200/80 dark:border-slate-700'
+                ? 'bg-paper-raised dark:bg-slate-800 text-slate-900 dark:text-white shadow-xs border border-slate-200/80 dark:border-slate-700'
                 : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5'
             }`}
           >

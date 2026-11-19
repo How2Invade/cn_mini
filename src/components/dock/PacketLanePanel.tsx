@@ -41,12 +41,12 @@ export const PacketLanePanel: React.FC = () => {
   };
 
   return (
-    <div className="h-full flex flex-col bg-[#F7F7F2] dark:bg-[#090D16] overflow-hidden font-sans select-none transition-colors duration-200">
+    <div className="h-full flex flex-col bg-[#F8F6F0] dark:bg-[#0F1011] overflow-hidden font-sans select-none transition-colors duration-200">
       {/* Top lane bar / Legend */}
-      <div className="flex flex-wrap items-center justify-between px-4 py-2 border-b border-[#E8E8E2] dark:border-slate-800 bg-white dark:bg-[#0F172A]">
+      <div className="flex flex-wrap items-center justify-between px-4 py-2 border-b border-paper-line dark:border-ink-line bg-paper-raised dark:bg-ink-raised">
         <div className="flex items-center gap-3">
-          <span className="text-xs font-bold text-slate-800 dark:text-white">Real-Time Packet Flow Lanes</span>
-          <span className="text-[11px] text-slate-500 dark:text-slate-400 bg-stone-100 dark:bg-slate-800 px-2.5 py-0.5 rounded-full border border-stone-200 dark:border-slate-700 font-mono">
+          <span className="text-xs font-semibold text-slate-800 dark:text-white">Real-Time Packet Flow Lanes</span>
+          <span className="text-[11px] text-slate-500 dark:text-slate-400 bg-stone-100 dark:bg-slate-800 px-2.5 py-0.5 rounded-sm border border-stone-200 dark:border-slate-700 font-mono">
             Active Flows: {recentFlows.length}
           </span>
         </div>
@@ -73,11 +73,11 @@ export const PacketLanePanel: React.FC = () => {
       {/* Lanes display with smooth scroll */}
       <div className="flex-1 overflow-y-auto p-4 space-y-3">
         {recentFlows.length === 0 ? (
-          <div className="h-full flex flex-col items-center justify-center text-center p-8 bg-white dark:bg-[#121824] rounded-3xl border border-dashed border-stone-300 dark:border-slate-800">
-            <div className="w-12 h-12 rounded-2xl bg-stone-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 flex items-center justify-center font-black text-xl mb-3">
+          <div className="h-full flex flex-col items-center justify-center text-center p-8 bg-paper-raised dark:bg-ink-raised rounded-3xl border border-dashed border-stone-300 dark:border-slate-800">
+            <div className="w-12 h-12 rounded-2xl bg-stone-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 flex items-center justify-center font-semibold text-xl mb-3">
               <Radio className="w-6 h-6 text-slate-400" />
             </div>
-            <h5 className="font-bold text-slate-900 dark:text-white text-sm">No Active Packet Flow Lanes</h5>
+            <h5 className="font-semibold text-slate-900 dark:text-white text-sm">No Active Packet Flow Lanes</h5>
             <p className="text-xs text-slate-500 dark:text-slate-400 max-w-sm mt-1.5 leading-relaxed">
               Click <strong>&quot;Send Traffic&quot;</strong> in the top bar to dispatch packets across switches and queues.
             </p>
@@ -93,27 +93,27 @@ export const PacketLanePanel: React.FC = () => {
             return (
               <div
                 key={flowKey}
-                className="bg-white dark:bg-[#121824] rounded-3xl p-4 border border-stone-200/80 dark:border-slate-800 shadow-xs hover:border-slate-400 dark:hover:border-slate-600 transition-all"
+                className="bg-paper-raised dark:bg-ink-raised rounded-3xl p-4 border border-paper-line dark:border-slate-800 shadow-xs hover:border-slate-400 dark:hover:border-slate-600 transition-all"
               >
                 {/* Lane Header */}
                 <div className="flex items-center justify-between pb-2 mb-2 border-b border-stone-100 dark:border-slate-800">
                   <div className="flex items-center gap-2">
-                    <span className="font-bold text-slate-900 dark:text-white text-xs font-mono">{flowKey}</span>
+                    <span className="font-semibold text-slate-900 dark:text-white text-xs font-mono">{flowKey}</span>
                     <span className="text-[10px] text-slate-400 font-mono">({hops.length} hops)</span>
                   </div>
                   <div className="flex items-center gap-2 font-mono text-[11px]">
-                    <span className="text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/60 px-2.5 py-0.5 rounded-full border border-emerald-200 dark:border-emerald-800 font-semibold flex items-center gap-1">
+                    <span className="text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/60 px-2.5 py-0.5 rounded-sm border border-emerald-200 dark:border-emerald-800 font-semibold flex items-center gap-1">
                       <CheckCircle2 className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
                       <span>{deliveredCount} delivered</span>
                     </span>
                     {droppedCount > 0 && (
-                      <span className="text-rose-700 dark:text-rose-300 bg-rose-50 dark:bg-rose-950/60 px-2.5 py-0.5 rounded-full border border-rose-200 dark:border-rose-800 font-semibold flex items-center gap-1">
+                      <span className="text-rose-700 dark:text-rose-300 bg-rose-50 dark:bg-rose-950/60 px-2.5 py-0.5 rounded-sm border border-rose-200 dark:border-rose-800 font-semibold flex items-center gap-1">
                         <XCircle className="w-3 h-3 text-rose-600 dark:text-rose-400" />
                         <span>{droppedCount} dropped</span>
                       </span>
                     )}
                     {inFlightCount > 0 && (
-                      <span className="text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-950/60 px-2.5 py-0.5 rounded-full border border-blue-200 dark:border-blue-800">
+                      <span className="text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-950/60 px-2.5 py-0.5 rounded-sm border border-blue-200 dark:border-blue-800">
                         {inFlightCount} in transit
                       </span>
                     )}
@@ -127,9 +127,9 @@ export const PacketLanePanel: React.FC = () => {
                     const devType = getDeviceType(hopId);
                     return (
                       <React.Fragment key={hopId}>
-                        <div className="flex flex-col items-center min-w-[95px] p-2.5 bg-stone-50 dark:bg-slate-900 border border-stone-200/80 dark:border-slate-800 rounded-2xl">
-                          <span className="text-[10px] uppercase font-bold text-slate-400">{devType}</span>
-                          <span className="text-xs font-bold text-slate-800 dark:text-slate-100 font-mono mt-0.5 truncate max-w-[90px]">
+                        <div className="flex flex-col items-center min-w-[95px] p-2.5 bg-stone-50 dark:bg-slate-900 border border-paper-line dark:border-slate-800 rounded-2xl">
+                          <span className="text-[10px] uppercase font-semibold text-slate-400">{devType}</span>
+                          <span className="text-xs font-semibold text-slate-800 dark:text-slate-100 font-mono mt-0.5 truncate max-w-[90px]">
                             {hopId}
                           </span>
                         </div>
@@ -146,15 +146,15 @@ export const PacketLanePanel: React.FC = () => {
 
                 {/* Packet stream cards under the lane */}
                 <div className="mt-2.5 pt-2 border-t border-stone-100 dark:border-slate-800 flex items-center gap-1.5 overflow-x-auto">
-                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mr-1">Packets:</span>
+                  <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mr-1">Packets:</span>
                   {packets.slice(-12).map((pkt) => {
                     const styling = CLASS_COLORS[pkt.trafficClass] || CLASS_COLORS.CLASS_BEST_EFFORT;
                     return (
                       <div
                         key={pkt.id}
                         title={`ID: ${pkt.id} | Class: ${styling.label} | Hop: ${pkt.currentHopIndex}/${pkt.path.length} | Status: ${pkt.status}${pkt.dropReason ? ` (${pkt.dropReason})` : ''}`}
-                        className={`flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-mono border ${styling.border} ${styling.bg} ${styling.text} transition-transform ${
-                          pkt.status === 'dropped' ? 'line-through !bg-rose-50 dark:!bg-rose-950 !border-rose-400 !text-rose-700 dark:!text-rose-300 font-bold' : ''
+                        className={`flex items-center gap-1 px-2.5 py-0.5 rounded-sm text-[11px] font-mono border ${styling.border} ${styling.bg} ${styling.text} transition-transform ${
+                          pkt.status === 'dropped' ? 'line-through !bg-rose-50 dark:!bg-rose-950 !border-rose-400 !text-rose-700 dark:!text-rose-300 font-semibold' : ''
                         }`}
                       >
                         <span>{pkt.id}</span>

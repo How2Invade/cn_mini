@@ -12,7 +12,7 @@ export function generateNS2Tcl(
   const lines: string[] = [];
 
   lines.push('# =================================================================');
-  lines.push('# NS-2 Simulation Script: Smart Adaptive Campus Network Model');
+  lines.push('# NS-2 Simulation Script: Redundant Data Center Campus Network Model');
   lines.push('# Generated dynamically from browser simulation engine state');
   lines.push('# NOTE: Generated equivalent model; not executed directly by browser');
   lines.push('# =================================================================\n');

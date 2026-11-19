@@ -30,7 +30,7 @@ export const PresetsDrawer: React.FC<PresetsDrawerProps> = ({ isOpen, onClose })
         className={`p-4 rounded-2xl border text-left cursor-pointer transition-all flex flex-col justify-between group ${
           isActive
             ? 'bg-stone-50 dark:bg-slate-800/90 border-slate-900 dark:border-white shadow-sm ring-1 ring-slate-900/10 dark:ring-white/10'
-            : 'bg-white dark:bg-[#151D2C] border-stone-200/80 dark:border-slate-800/80 hover:border-slate-400 dark:hover:border-slate-600 hover:bg-stone-50/50'
+            : 'bg-paper-raised dark:bg-[#1C1D20] border-paper-line dark:border-slate-800/80 hover:border-slate-400 dark:hover:border-slate-600 hover:bg-stone-50/50'
         }`}
       >
         <div className="flex items-start justify-between gap-1">
@@ -46,11 +46,11 @@ export const PresetsDrawer: React.FC<PresetsDrawerProps> = ({ isOpen, onClose })
                 <Activity className="w-4 h-4 text-blue-500" />
               )}
             </div>
-            <h4 className="font-bold text-xs text-slate-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition">
+            <h4 className="font-semibold text-xs text-slate-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition">
               {preset.title}
             </h4>
           </div>
-          <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${tagColor}`}>
+          <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-sm ${tagColor}`}>
             {categoryTag}
           </span>
         </div>
@@ -70,7 +70,7 @@ export const PresetsDrawer: React.FC<PresetsDrawerProps> = ({ isOpen, onClose })
                 resetCurrent();
               }}
               title="Reset counters and layout for this scenario"
-              className="text-slate-900 dark:text-white font-bold hover:underline text-[11px]"
+              className="text-slate-900 dark:text-white font-semibold hover:underline text-[11px]"
             >
               Reset
             </button>
@@ -81,11 +81,11 @@ export const PresetsDrawer: React.FC<PresetsDrawerProps> = ({ isOpen, onClose })
   };
 
   return (
-    <div className="w-72 sm:w-80 bg-[#FAF9F5] dark:bg-[#0F1420] border-r border-[#E8E8E2] dark:border-slate-800/80 flex flex-col h-full shrink-0 shadow-xl z-20 select-none transition-colors duration-200">
+    <div className="w-72 sm:w-80 bg-[#FBFAF6] dark:bg-[#141517] border-r border-paper-line dark:border-ink-line flex flex-col h-full shrink-0 shadow-xl z-20 select-none transition-colors duration-200">
       {/* Header */}
-      <div className="p-4 border-b border-[#E8E8E2] dark:border-slate-800/80 flex items-center justify-between bg-white/70 dark:bg-[#0B0F19]/70 backdrop-blur">
+      <div className="p-4 border-b border-paper-line dark:border-ink-line flex items-center justify-between bg-white/70 dark:bg-[#121315]/70">
         <div>
-          <h3 className="font-bold text-xs text-slate-900 dark:text-white uppercase tracking-wider">
+          <h3 className="font-semibold text-xs text-slate-900 dark:text-white uppercase tracking-wider">
             Network Scenarios
           </h3>
           <p className="text-[11px] text-slate-500 dark:text-slate-400">Curated campus lab topologies</p>
@@ -103,7 +103,7 @@ export const PresetsDrawer: React.FC<PresetsDrawerProps> = ({ isOpen, onClose })
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
         {/* Category: Architectures */}
         <div>
-          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-2 px-1">
+          <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider block mb-2 px-1">
             Core Architectures
           </span>
           <div className="space-y-2">
@@ -121,7 +121,7 @@ export const PresetsDrawer: React.FC<PresetsDrawerProps> = ({ isOpen, onClose })
 
         {/* Category: Experiments */}
         <div>
-          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-2 px-1">
+          <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider block mb-2 px-1">
             Dynamic Experiments
           </span>
           <div className="space-y-2">
@@ -140,7 +140,7 @@ export const PresetsDrawer: React.FC<PresetsDrawerProps> = ({ isOpen, onClose })
         {/* Category: Tests & Benchmarks */}
         {tests.length > 0 && (
           <div>
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-2 px-1">
+            <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider block mb-2 px-1">
               Diagnostic Benchmarks
             </span>
             <div className="space-y-2">

@@ -4,14 +4,14 @@ import { EvidenceBadge } from './EvidenceBadge';
 
 export const ResearchPanel: React.FC = () => {
   return (
-    <div className="bg-white dark:bg-[#131B2E] border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-sm space-y-6 text-slate-800 dark:text-slate-100 transition-colors duration-200">
+    <div className="bg-paper-raised dark:bg-ink-raised border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-sm space-y-6 text-slate-800 dark:text-slate-100 transition-colors duration-200">
       <div className="pb-4 border-b border-slate-100 dark:border-slate-800">
         <div className="flex items-center gap-2">
           <div className="p-2 rounded-xl bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-emerald-400">
             <BookOpen className="w-5 h-5" />
           </div>
           <div>
-            <h2 className="text-base font-bold text-slate-900 dark:text-white">Research & Academic Attribution</h2>
+            <h2 className="text-base font-semibold text-slate-900 dark:text-white">Research & Academic Attribution</h2>
             <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
               Full academic citations, source verification status, and clear delineation of deliverables.
             </p>
@@ -22,7 +22,7 @@ export const ResearchPanel: React.FC = () => {
       {/* 3-Way Deliverables Split */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-900/70 border border-slate-200 dark:border-slate-800 space-y-2.5">
-          <div className="flex items-center gap-2 text-blue-700 dark:text-sky-400 font-bold text-xs">
+          <div className="flex items-center gap-2 text-blue-700 dark:text-sky-400 font-semibold text-xs">
             <BookOpen className="w-4 h-4" />
             <span>1. Research Foundation</span>
           </div>
@@ -38,7 +38,7 @@ export const ResearchPanel: React.FC = () => {
         </div>
 
         <div className="p-5 rounded-2xl bg-indigo-50/50 dark:bg-indigo-950/30 border border-indigo-200 dark:border-indigo-800 space-y-2.5">
-          <div className="flex items-center gap-2 text-indigo-700 dark:text-indigo-400 font-bold text-xs">
+          <div className="flex items-center gap-2 text-indigo-700 dark:text-indigo-400 font-semibold text-xs">
             <GitFork className="w-4 h-4" />
             <span>2. Packet Tracer Implementation</span>
           </div>
@@ -54,7 +54,7 @@ export const ResearchPanel: React.FC = () => {
         </div>
 
         <div className="p-5 rounded-2xl bg-emerald-50/50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800 space-y-2.5">
-          <div className="flex items-center gap-2 text-emerald-700 dark:text-emerald-400 font-bold text-xs">
+          <div className="flex items-center gap-2 text-emerald-700 dark:text-emerald-400 font-semibold text-xs">
             <Award className="w-4 h-4" />
             <span>3. Our Simulator Extensions</span>
           </div>
@@ -72,7 +72,7 @@ export const ResearchPanel: React.FC = () => {
 
       {/* Verification Matrix Table */}
       <div className="space-y-3 pt-2">
-        <h3 className="text-xs font-bold text-slate-900 dark:text-white">Topological Verification Matrix</h3>
+        <h3 className="text-xs font-semibold text-slate-900 dark:text-white">Topological Verification Matrix</h3>
         <div className="border border-slate-200 dark:border-slate-800 rounded-2xl overflow-x-auto">
           <table className="w-full text-left text-xs">
             <thead className="bg-slate-50 dark:bg-slate-900/80 text-slate-700 dark:text-slate-300 border-b border-slate-200 dark:border-slate-800 font-semibold">

@@ -24,24 +24,24 @@ export const BottomDock: React.FC<BottomDockProps> = ({
 
   return (
     <div
-      className={`bg-white dark:bg-[#101622] border-t border-[#E8E8E2] dark:border-slate-800 transition-all duration-300 flex flex-col shadow-xl z-20 ${
-        !isOpen ? 'h-14' : isMaximized ? 'h-[75vh]' : 'h-80'
+      className={`bg-paper-raised dark:bg-[#141517] border-t border-paper-line dark:border-ink-line transition-[height] duration-200 flex flex-col z-20 ${
+        !isOpen ? 'h-11' : isMaximized ? 'h-[75vh]' : 'h-80'
       }`}
     >
-      <div className="flex items-center justify-between px-4 h-14 border-b border-[#E8E8E2] dark:border-slate-800 bg-[#F7F7F2] dark:bg-[#0B0F19] shrink-0">
-        <div className="flex items-center gap-2 overflow-x-auto min-w-0 mr-2 py-1 select-none">
+      <div className="flex items-center justify-between px-2 h-11 border-b border-paper-line dark:border-ink-line bg-paper dark:bg-ink shrink-0">
+        <div className="flex items-center overflow-x-auto min-w-0 mr-2 select-none">
           <button
             onClick={() => {
               setActiveTab('analytics');
               setIsOpen(true);
             }}
-            className={`h-10 px-4 rounded-xl text-sm font-bold flex items-center gap-2 transition-all shrink-0 ${
+            className={`relative h-11 px-3 text-[13px] flex items-center gap-2 transition-colors shrink-0 ${
               isOpen && activeTab === 'analytics'
-                ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-xs border border-slate-200/80 dark:border-slate-700'
-                : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5'
+                ? 'text-slate-950 dark:text-slate-50 font-semibold after:absolute after:left-3 after:right-3 after:bottom-0 after:h-[2px] after:bg-signal-500'
+                : 'text-slate-500 dark:text-slate-400 font-medium hover:text-slate-900 dark:hover:text-slate-100'
             }`}
           >
-            <Activity className="w-4 h-4 text-indigo-500" />
+            <Activity className="w-3.5 h-3.5 opacity-70" />
             <span>Analytics Grid</span>
           </button>
 
@@ -50,13 +50,13 @@ export const BottomDock: React.FC<BottomDockProps> = ({
               setActiveTab('terminal');
               setIsOpen(true);
             }}
-            className={`h-10 px-4 rounded-xl text-sm font-bold flex items-center gap-2 transition-all shrink-0 ${
+            className={`relative h-11 px-3 text-[13px] flex items-center gap-2 transition-colors shrink-0 ${
               isOpen && activeTab === 'terminal'
-                ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-xs border border-slate-200/80 dark:border-slate-700'
-                : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5'
+                ? 'text-slate-950 dark:text-slate-50 font-semibold after:absolute after:left-3 after:right-3 after:bottom-0 after:h-[2px] after:bg-signal-500'
+                : 'text-slate-500 dark:text-slate-400 font-medium hover:text-slate-900 dark:hover:text-slate-100'
             }`}
           >
-            <Terminal className="w-4 h-4 text-emerald-500" />
+            <Terminal className="w-3.5 h-3.5 opacity-70" />
             <span>Terminal & NS-2</span>
           </button>
 
@@ -65,13 +65,13 @@ export const BottomDock: React.FC<BottomDockProps> = ({
               setActiveTab('packet_lane');
               setIsOpen(true);
             }}
-            className={`h-10 px-4 rounded-xl text-sm font-bold flex items-center gap-2 transition-all shrink-0 ${
+            className={`relative h-11 px-3 text-[13px] flex items-center gap-2 transition-colors shrink-0 ${
               isOpen && activeTab === 'packet_lane'
-                ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-xs border border-slate-200/80 dark:border-slate-700'
-                : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5'
+                ? 'text-slate-950 dark:text-slate-50 font-semibold after:absolute after:left-3 after:right-3 after:bottom-0 after:h-[2px] after:bg-signal-500'
+                : 'text-slate-500 dark:text-slate-400 font-medium hover:text-slate-900 dark:hover:text-slate-100'
             }`}
           >
-            <Radio className="w-4 h-4 text-cyan-500" />
+            <Radio className="w-3.5 h-3.5 opacity-70" />
             <span>Packet Lane</span>
           </button>
 
@@ -80,13 +80,13 @@ export const BottomDock: React.FC<BottomDockProps> = ({
               setActiveTab('event_log');
               setIsOpen(true);
             }}
-            className={`h-10 px-4 rounded-xl text-sm font-bold flex items-center gap-2 transition-all shrink-0 ${
+            className={`relative h-11 px-3 text-[13px] flex items-center gap-2 transition-colors shrink-0 ${
               isOpen && activeTab === 'event_log'
-                ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-xs border border-slate-200/80 dark:border-slate-700'
-                : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5'
+                ? 'text-slate-950 dark:text-slate-50 font-semibold after:absolute after:left-3 after:right-3 after:bottom-0 after:h-[2px] after:bg-signal-500'
+                : 'text-slate-500 dark:text-slate-400 font-medium hover:text-slate-900 dark:hover:text-slate-100'
             }`}
           >
-            <ScrollText className="w-4 h-4 text-slate-500" />
+            <ScrollText className="w-3.5 h-3.5 opacity-70" />
             <span>Event Stream</span>
           </button>
         </div>
@@ -97,7 +97,7 @@ export const BottomDock: React.FC<BottomDockProps> = ({
             <button
               onClick={() => setIsMaximized(prev => !prev)}
               title={isMaximized ? 'Restore height' : 'Maximize dock'}
-              className="h-10 px-3.5 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition"
+              className="h-8 px-2.5 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5 rounded-md text-xs font-medium flex items-center gap-1.5 transition-colors"
             >
               {isMaximized ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
               <span className="hidden sm:inline">{isMaximized ? 'Restore' : 'Maximize'}</span>
@@ -107,7 +107,7 @@ export const BottomDock: React.FC<BottomDockProps> = ({
           <button
             onClick={() => setIsOpen(!isOpen)}
             title={isOpen ? 'Collapse dock' : 'Expand dock'}
-            className="h-10 px-3.5 bg-white dark:bg-slate-800 border border-stone-200/80 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:text-slate-950 dark:hover:text-white hover:bg-stone-50 dark:hover:bg-slate-700/80 rounded-xl text-xs font-bold flex items-center gap-1.5 transition shadow-xs"
+            className="h-8 px-2.5 bg-paper-raised dark:bg-ink-raised border border-paper-line dark:border-ink-line text-slate-700 dark:text-slate-200 hover:text-slate-950 dark:hover:text-white hover:bg-stone-50 dark:hover:bg-slate-700/80 rounded-md text-xs font-medium flex items-center gap-1.5 transition-colors"
           >
             {isOpen ? <ChevronDown className="w-4 h-4" /> : <ChevronUp className="w-4 h-4" />}
             <span>{isOpen ? 'Collapse' : 'Expand'}</span>

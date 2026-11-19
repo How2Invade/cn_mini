@@ -68,28 +68,28 @@ export const Copilot: React.FC = () => {
   const diag = generateDiagnosis();
 
   return (
-    <div className="bg-white dark:bg-[#121824] border border-stone-200/80 dark:border-slate-800 rounded-3xl p-5 shadow-sm space-y-3.5 transition-colors duration-200">
+    <div className="bg-paper-raised dark:bg-ink-raised border border-paper-line dark:border-slate-800 rounded-3xl p-5 shadow-sm space-y-3.5 transition-colors duration-200">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <div className="p-2 rounded-xl bg-stone-100 dark:bg-slate-800 text-slate-800 dark:text-emerald-400">
             <Sparkles className="w-4 h-4" />
           </div>
           <div>
-            <h3 className="text-xs font-bold text-slate-900 dark:text-white">Network Copilot Diagnostic</h3>
+            <h3 className="text-xs font-semibold text-slate-900 dark:text-white">Network Copilot Diagnostic</h3>
             <span className="text-[10px] text-slate-500 dark:text-slate-400 font-mono">Deterministic State Analysis</span>
           </div>
         </div>
         <EvidenceBadge type="Browser-simulated" />
       </div>
 
-      <div className="bg-stone-50/80 dark:bg-[#0B0F19]/90 backdrop-blur rounded-2xl border border-stone-200/60 dark:border-slate-800 p-4 space-y-2.5 text-xs text-slate-800 dark:text-slate-200">
+      <div className="bg-stone-50/80 dark:bg-[#121315]/90 rounded-2xl border border-stone-200/60 dark:border-slate-800 p-4 space-y-2.5 text-xs text-slate-800 dark:text-slate-200">
         <div className="flex items-center gap-2">
           {diag.isCritical ? (
             <AlertOctagon className="w-4 h-4 text-rose-600 shrink-0" />
           ) : (
             <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
           )}
-          <span className="font-bold text-slate-900 dark:text-white text-sm">{diag.title}</span>
+          <span className="font-semibold text-slate-900 dark:text-white text-sm">{diag.title}</span>
         </div>
 
         <p className="leading-relaxed">

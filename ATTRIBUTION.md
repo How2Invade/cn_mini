@@ -22,6 +22,6 @@
 ---
 
 ## 2. Web Simulator Project
-- **Lead Developer & QA:** Antigravity AI Coding Assistant & Research Team
+- **Team:** Meet Navin Mangaonkar (10616), Yash Masaye (10617), Sanika (10613), TE Computer Engineering, Fr. CRCE, Mumbai
 - **Implementation:** Pure TypeScript discrete-event simulation engine, React 19, Tailwind CSS, `@xyflow/react`, and Recharts.
 - **Scientific Integrity Statement:** This website is a self-contained browser laboratory and does not connect to Cisco hardware or execute Cisco IOS. Every metric is labelled with its exact origin.

@@ -28,7 +28,7 @@ export const ControlPanel: React.FC = () => {
   };
 
   return (
-    <div className="w-full bg-white border border-slate-200 rounded-xl p-4 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
+    <div className="w-full bg-paper-raised border border-slate-200 rounded-xl p-4 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
       {/* Simulation Timeline Controls */}
       <div className="flex items-center gap-2 w-full md:w-auto">
         <button
@@ -67,7 +67,7 @@ export const ControlPanel: React.FC = () => {
               key={s}
               onClick={() => setSpeed(s)}
               className={`px-2 py-0.5 rounded font-mono text-[11px] ${
-                speed === s ? 'bg-blue-600 text-white font-bold' : 'text-slate-600 hover:bg-slate-200'
+                speed === s ? 'bg-blue-600 text-white font-semibold' : 'text-slate-600 hover:bg-slate-200'
               }`}
             >
               {s}x
@@ -136,7 +136,7 @@ export const ControlPanel: React.FC = () => {
           onClick={toggleQoS}
           className={`px-2.5 py-1 rounded-lg text-xs font-mono flex items-center gap-1 border transition-all ${
             qosEnabled
-              ? 'bg-purple-50 text-purple-700 border-purple-300 font-bold'
+              ? 'bg-purple-50 text-purple-700 border-purple-300 font-semibold'
               : 'bg-slate-50 text-slate-500 border-slate-200 hover:bg-slate-100'
           }`}
           title="Toggle Strict Priority QoS"

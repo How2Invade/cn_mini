@@ -16,10 +16,10 @@ export const PacketAnimationOverlay: React.FC = () => {
       {/* Sleek Pill Header Badge */}
       <button
         onClick={() => setIsExpanded(!isExpanded)}
-        className="flex items-center gap-2 bg-white/95 dark:bg-[#121824]/95 backdrop-blur-md px-3.5 h-8.5 rounded-xl border border-stone-200/80 dark:border-slate-800 shadow-2xs text-xs font-medium text-slate-800 dark:text-slate-100 hover:border-slate-400 dark:hover:border-slate-600 transition"
+        className="flex items-center gap-2 bg-paper-raised dark:bg-ink-raised/95 px-3.5 h-8.5 rounded-xl border border-paper-line dark:border-slate-800 shadow-2xs text-xs font-medium text-slate-800 dark:text-slate-100 hover:border-slate-400 dark:hover:border-slate-600 transition"
       >
         <Radio className={`w-3.5 h-3.5 ${isRunning ? 'text-emerald-500 animate-pulse' : 'text-slate-400'}`} />
-        <span className="font-bold text-[11px]">
+        <span className="font-semibold text-[11px]">
           {inTransitCount > 0 ? `${inTransitCount} In Flight` : 'Packet Stream'}
         </span>
         <span className="font-mono text-[10px] text-slate-400">T:{tick}</span>
@@ -28,7 +28,7 @@ export const PacketAnimationOverlay: React.FC = () => {
 
       {/* Expandable Stream Details */}
       {isExpanded && (
-        <div className="mt-2 bg-white/95 dark:bg-[#121824]/95 backdrop-blur-md border border-stone-200/80 dark:border-slate-800 shadow-xl rounded-2xl p-3 w-72 animate-in fade-in zoom-in-95 duration-150">
+        <div className="mt-2 bg-paper-raised dark:bg-ink-raised/95 border border-paper-line dark:border-slate-800 shadow-xl rounded-2xl p-3 w-72 animate-in fade-in zoom-in-95 duration-150">
           <div className="space-y-1.5 max-h-44 overflow-y-auto">
             {visiblePackets.map((pkt) => {
               const isDelivered = pkt.status === 'delivered';
@@ -42,7 +42,7 @@ export const PacketAnimationOverlay: React.FC = () => {
                       ? 'bg-emerald-50/80 dark:bg-emerald-950/40 border-emerald-200/80 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300'
                       : isDropped
                       ? 'bg-rose-50/80 dark:bg-rose-950/40 border-rose-200/80 dark:border-rose-800 text-rose-800 dark:text-rose-300'
-                      : 'bg-stone-50 dark:bg-slate-800/60 border-stone-200/80 dark:border-slate-700 text-slate-700 dark:text-slate-300'
+                      : 'bg-stone-50 dark:bg-slate-800/60 border-paper-line dark:border-slate-700 text-slate-700 dark:text-slate-300'
                   }`}
                 >
                   <div className="flex items-center gap-1.5 truncate">
@@ -53,13 +53,13 @@ export const PacketAnimationOverlay: React.FC = () => {
                     ) : (
                       <Send className="w-3 h-3 text-blue-600 dark:text-blue-400 shrink-0" />
                     )}
-                    <span className="font-bold truncate">{pkt.id}</span>
+                    <span className="font-semibold truncate">{pkt.id}</span>
                     <span className="text-slate-400 truncate">
                       {pkt.source}→{pkt.destination}
                     </span>
                   </div>
 
-                  <div className="shrink-0 font-bold">
+                  <div className="shrink-0 font-semibold">
                     {isDropped ? (
                       <span className="text-rose-600 dark:text-rose-400">DROP</span>
                     ) : isDelivered ? (

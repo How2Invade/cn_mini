@@ -13,7 +13,7 @@ const baselineDevices: Device[] = [
     interfaces: [
       { name: 'Gi0/0', ip: '192.168.1.1', mask: '255.255.255.0', mac: '00:1A:2B:3C:4D:01' }
     ],
-    position: { x: 420, y: 40 },
+    position: { x: 400, y: 0 },
   },
   {
     id: 'SW-DIST',
@@ -26,7 +26,7 @@ const baselineDevices: Device[] = [
       { name: 'Fa0/3', mac: '00:1A:2B:3C:4D:04' },
       { name: 'Fa0/4', mac: '00:1A:2B:3C:4D:05' }
     ],
-    position: { x: 420, y: 190 },
+    position: { x: 400, y: 150 },
   },
   {
     id: 'SW-ACC-A',
@@ -38,7 +38,7 @@ const baselineDevices: Device[] = [
       { name: 'Fa0/1', mac: '00:1A:2B:3C:4D:06', vlan: 20 },
       { name: 'Fa0/2', mac: '00:1A:2B:3C:4D:07', vlan: 20 }
     ],
-    position: { x: 180, y: 340 },
+    position: { x: 100, y: 300 },
   },
   {
     id: 'SRV-CAMPUS',
@@ -49,7 +49,7 @@ const baselineDevices: Device[] = [
     gateway: '192.168.40.1',
     mac: '00:1A:2B:3C:4D:12',
     interfaces: [{ name: 'Eth0', ip: '192.168.40.10', mask: '255.255.255.0', mac: '00:1A:2B:3C:4D:12', vlan: 40 }],
-    position: { x: 420, y: 340 },
+    position: { x: 400, y: 300 },
   },
   {
     id: 'SW-ACC-B',
@@ -61,7 +61,7 @@ const baselineDevices: Device[] = [
       { name: 'Fa0/1', mac: '00:1A:2B:3C:4D:08', vlan: 30 },
       { name: 'Fa0/2', mac: '00:1A:2B:3C:4D:09', vlan: 30 }
     ],
-    position: { x: 660, y: 340 },
+    position: { x: 700, y: 300 },
   },
   {
     id: 'PC-ADMIN',
@@ -72,7 +72,7 @@ const baselineDevices: Device[] = [
     gateway: '192.168.20.1',
     mac: '00:1A:2B:3C:4D:10',
     interfaces: [{ name: 'Eth0', ip: '192.168.20.10', mask: '255.255.255.0', mac: '00:1A:2B:3C:4D:10', vlan: 20 }],
-    position: { x: 180, y: 490 },
+    position: { x: 100, y: 450 },
   },
   {
     id: 'PC-STUD',
@@ -83,7 +83,7 @@ const baselineDevices: Device[] = [
     gateway: '192.168.30.1',
     mac: '00:1A:2B:3C:4D:11',
     interfaces: [{ name: 'Eth0', ip: '192.168.30.10', mask: '255.255.255.0', mac: '00:1A:2B:3C:4D:11', vlan: 30 }],
-    position: { x: 660, y: 490 },
+    position: { x: 700, y: 450 },
   },
 ];
 
@@ -197,7 +197,7 @@ const enhancedDevices: Device[] = [
       { name: 'Gi0/0/1', ip: '10.0.1.1', mask: '255.255.255.252', mac: '00:50:79:66:68:02' },
       { name: 'Gi0/0/2', ip: '10.0.1.5', mask: '255.255.255.252', mac: '00:50:79:66:68:03' }
     ],
-    position: { x: 300, y: 30 },
+    position: { x: 240, y: 0 },
   },
   {
     id: 'R2',
@@ -210,7 +210,7 @@ const enhancedDevices: Device[] = [
       { name: 'Gi0/0/1', ip: '10.0.1.9', mask: '255.255.255.252', mac: '00:50:79:66:68:05' },
       { name: 'Gi0/0/2', ip: '10.0.1.13', mask: '255.255.255.252', mac: '00:50:79:66:68:06' }
     ],
-    position: { x: 620, y: 30 },
+    position: { x: 600, y: 0 },
   },
 
   // Tier 2: Core Multilayer Switches (HSRP Active / Standby)
@@ -229,7 +229,7 @@ const enhancedDevices: Device[] = [
       { name: 'Vlan40', ip: '192.168.40.2', mask: '255.255.255.0', mac: '00:50:79:66:68:0A', vlan: 40 },
       { name: 'Po1', mac: '00:50:79:66:68:0B' }
     ],
-    position: { x: 300, y: 170 },
+    position: { x: 240, y: 150 },
   },
   {
     id: 'SW2',
@@ -246,7 +246,7 @@ const enhancedDevices: Device[] = [
       { name: 'Vlan40', ip: '192.168.40.3', mask: '255.255.255.0', mac: '00:50:79:66:68:0F', vlan: 40 },
       { name: 'Po1', mac: '00:50:79:66:68:10' }
     ],
-    position: { x: 620, y: 170 },
+    position: { x: 600, y: 150 },
   },
 
   // Tier 3: Distribution Switches (North & South)
@@ -260,7 +260,7 @@ const enhancedDevices: Device[] = [
       { name: 'Fa0/2', mac: '00:50:79:66:68:12' },
       { name: 'Fa0/3', mac: '00:50:79:66:68:13' }
     ],
-    position: { x: 120, y: 310 },
+    position: { x: 60, y: 310 },
   },
   {
     id: 'SW4',
@@ -272,7 +272,7 @@ const enhancedDevices: Device[] = [
       { name: 'Fa0/2', mac: '00:50:79:66:68:15' },
       { name: 'Fa0/3', mac: '00:50:79:66:68:16' }
     ],
-    position: { x: 460, y: 310 },
+    position: { x: 420, y: 310 },
   },
 
   // Right Side: Data Center & DMZ Servers
@@ -285,7 +285,7 @@ const enhancedDevices: Device[] = [
     gateway: '192.168.40.1',
     mac: '00:50:79:66:68:30',
     interfaces: [{ name: 'Eth0', ip: '192.168.40.10', mask: '255.255.255.0', mac: '00:50:79:66:68:30', vlan: 40 }],
-    position: { x: 800, y: 170 },
+    position: { x: 900, y: 150 },
   },
   {
     id: 'SRV-FTP',
@@ -296,7 +296,7 @@ const enhancedDevices: Device[] = [
     gateway: '192.168.40.1',
     mac: '00:50:79:66:68:31',
     interfaces: [{ name: 'Eth0', ip: '192.168.40.12', mask: '255.255.255.0', mac: '00:50:79:66:68:31', vlan: 40 }],
-    position: { x: 800, y: 310 },
+    position: { x: 900, y: 310 },
   },
   {
     id: 'SRV-DMZ',
@@ -307,7 +307,7 @@ const enhancedDevices: Device[] = [
     gateway: '192.168.50.1',
     mac: '00:50:79:66:68:32',
     interfaces: [{ name: 'Eth0', ip: '192.168.50.10', mask: '255.255.255.0', mac: '00:50:79:66:68:32', vlan: 50 }],
-    position: { x: 800, y: 450 },
+    position: { x: 900, y: 470 },
   },
 
   // Tier 4: Access Switches
@@ -318,7 +318,7 @@ const enhancedDevices: Device[] = [
     vlan: 20,
     mac: '00:50:79:66:68:17',
     interfaces: [{ name: 'Fa0/1', mac: '00:50:79:66:68:17' }, { name: 'Fa0/2', mac: '00:50:79:66:68:18' }],
-    position: { x: 120, y: 450 },
+    position: { x: 60, y: 470 },
   },
   {
     id: 'SW6',
@@ -327,7 +327,7 @@ const enhancedDevices: Device[] = [
     vlan: 30,
     mac: '00:50:79:66:68:19',
     interfaces: [{ name: 'Fa0/1', mac: '00:50:79:66:68:19' }, { name: 'Fa0/2', mac: '00:50:79:66:68:1A' }],
-    position: { x: 460, y: 450 },
+    position: { x: 420, y: 470 },
   },
 
   // Tier 5: End-User Workstations (Bottom)
@@ -340,7 +340,7 @@ const enhancedDevices: Device[] = [
     gateway: '192.168.20.1',
     mac: '00:50:79:66:68:20',
     interfaces: [{ name: 'Eth0', ip: '192.168.20.10', mask: '255.255.255.0', mac: '00:50:79:66:68:20', vlan: 20 }],
-    position: { x: 120, y: 580 },
+    position: { x: 60, y: 620 },
   },
   {
     id: 'PC-STUD',
@@ -351,7 +351,7 @@ const enhancedDevices: Device[] = [
     gateway: '192.168.30.1',
     mac: '00:50:79:66:68:21',
     interfaces: [{ name: 'Eth0', ip: '192.168.30.10', mask: '255.255.255.0', mac: '00:50:79:66:68:21', vlan: 30 }],
-    position: { x: 460, y: 580 },
+    position: { x: 420, y: 620 },
   },
 ];
 

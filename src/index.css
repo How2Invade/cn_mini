@@ -4,47 +4,112 @@
 
 @layer base {
   body {
-    font-family: 'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, sans-serif;
+    font-family: 'IBM Plex Sans', system-ui, -apple-system, sans-serif;
+    font-feature-settings: 'ss02' on;
+  }
+  /* Bold weights above 700 look shouty in Plex, cap them */
+  .font-black,
+  .font-extrabold {
+    font-weight: 700;
   }
 }
 
-/* Custom scrollbars for clean technical aesthetic */
+/* Scrollbars */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
 }
 ::-webkit-scrollbar-track {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #CBD5E1;
-  border-radius: 9999px;
+  background: #c9c5bb;
+  border-radius: 4px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
 }
-::-webkit-scrollbar-thumb:hover {
-  background: #94A3B8;
-}
-
 .dark ::-webkit-scrollbar-thumb {
-  background: #334155;
-}
-.dark ::-webkit-scrollbar-thumb:hover {
-  background: #475569;
+  background: #34363b;
+  background-clip: padding-box;
 }
 
-/* React Flow canvas styling */
+/* Canvas */
 .react-flow__background {
   background-color: transparent;
 }
 .react-flow__edge-path {
-  stroke-width: 2.5;
+  stroke-width: 2;
+}
+.react-flow__attribution {
+  display: none;
 }
 
-/* Modern pill and card glow micro-animations */
+/* Zoom controls: square, quiet, readable in both themes */
+.react-flow__controls {
+  box-shadow: none !important;
+  border: 1px solid #dfdbd0;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #fbfaf6;
+}
+.react-flow__controls-button {
+  width: 28px !important;
+  height: 28px !important;
+  background: #fbfaf6 !important;
+  border-bottom: 1px solid #dfdbd0 !important;
+  color: #3a3936 !important;
+}
+.react-flow__controls-button:last-child {
+  border-bottom: none !important;
+}
+.react-flow__controls-button svg {
+  fill: currentColor !important;
+  max-width: 11px;
+  max-height: 11px;
+}
+.react-flow__controls-button:hover {
+  background: #efede8 !important;
+}
+.dark .react-flow__controls {
+  border-color: #2a2c30;
+  background: #17181a;
+}
+.dark .react-flow__controls-button {
+  background: #17181a !important;
+  border-bottom-color: #2a2c30 !important;
+  color: #c9c5bb !important;
+}
+.dark .react-flow__controls-button:hover {
+  background: #232528 !important;
+}
+
+/* Section label used across panels */
+.eyebrow {
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
 @keyframes pulse-subtle {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.85; transform: scale(1.02); }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
 }
-
 .animate-pulse-subtle {
   animation: pulse-subtle 2.5s infinite ease-in-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

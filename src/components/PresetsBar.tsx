@@ -7,7 +7,7 @@ export const PresetsBar: React.FC = () => {
   const { currentPreset, setPreset } = useSimulation();
 
   return (
-    <div className="w-full bg-white border-y border-slate-200 py-2.5 px-4 overflow-x-auto">
+    <div className="w-full bg-paper-raised border-y border-slate-200 py-2.5 px-4 overflow-x-auto">
       <div className="max-w-7xl mx-auto flex items-center gap-2 min-w-max">
         <div className="flex items-center gap-1.5 text-xs font-semibold text-slate-500 mr-2">
           <Bookmark className="w-3.5 h-3.5" />

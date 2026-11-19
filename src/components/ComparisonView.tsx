@@ -4,10 +4,10 @@ import { Check, X, ShieldAlert, Sparkles } from 'lucide-react';
 
 export const ComparisonView: React.FC = () => {
   return (
-    <div className="bg-white dark:bg-[#131B2E] border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-sm space-y-5 text-slate-800 dark:text-slate-100 transition-colors duration-200">
+    <div className="bg-paper-raised dark:bg-ink-raised border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-sm space-y-5 text-slate-800 dark:text-slate-100 transition-colors duration-200">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pb-3 border-b border-slate-100 dark:border-slate-800">
         <div>
-          <h3 className="text-sm font-bold text-slate-900 dark:text-white">
+          <h3 className="text-sm font-semibold text-slate-900 dark:text-white">
             Baseline (Paper) vs. Enhanced (Demian-Derived) Architecture Comparison
           </h3>
           <p className="text-xs text-slate-500 dark:text-slate-400">
@@ -19,7 +19,7 @@ export const ComparisonView: React.FC = () => {
 
       <div className="overflow-x-auto">
         <table className="w-full text-left text-xs border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden">
-          <thead className="bg-slate-50 dark:bg-[#0B0F19] text-slate-700 dark:text-slate-300 font-semibold border-b border-slate-200 dark:border-slate-800">
+          <thead className="bg-slate-50 dark:bg-[#121315] text-slate-700 dark:text-slate-300 font-semibold border-b border-slate-200 dark:border-slate-800">
             <tr>
               <th className="p-3.5">Architectural Domain</th>
               <th className="p-3.5 w-1/3">Research Paper Baseline (Varne et al.)</th>

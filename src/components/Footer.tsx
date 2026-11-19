@@ -9,7 +9,7 @@ export const Footer: React.FC = () => {
           <div className="flex items-center gap-2">
             <ShieldCheck className="w-4 h-4 text-emerald-600" />
             <span className="font-semibold text-slate-700">
-              Smart Adaptive Campus Network Simulator
+              Redundant Data Center Campus Network
             </span>
             <span>— Educational Discrete-Event Simulation</span>
           </div>

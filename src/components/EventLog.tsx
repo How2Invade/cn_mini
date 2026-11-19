@@ -16,14 +16,14 @@ export const EventLog: React.FC = () => {
   const getSeverityBadge = (severity: EventSeverity) => {
     switch (severity) {
       case 'error':
-        return <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-rose-100 dark:bg-rose-950/70 text-rose-700 dark:text-rose-300">ERR</span>;
+        return <span className="px-2 py-0.5 rounded-sm text-[10px] font-mono font-semibold bg-rose-100 dark:bg-rose-950/70 text-rose-700 dark:text-rose-300">ERR</span>;
       case 'warning':
-        return <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-amber-100 dark:bg-amber-950/70 text-amber-700 dark:text-amber-300">WARN</span>;
+        return <span className="px-2 py-0.5 rounded-sm text-[10px] font-mono font-semibold bg-amber-100 dark:bg-amber-950/70 text-amber-700 dark:text-amber-300">WARN</span>;
       case 'success':
-        return <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-emerald-100 dark:bg-emerald-950/70 text-emerald-700 dark:text-emerald-300">OK</span>;
+        return <span className="px-2 py-0.5 rounded-sm text-[10px] font-mono font-semibold bg-emerald-100 dark:bg-emerald-950/70 text-emerald-700 dark:text-emerald-300">OK</span>;
       case 'info':
       default:
-        return <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-blue-100 dark:bg-blue-950/70 text-blue-700 dark:text-blue-300">INFO</span>;
+        return <span className="px-2 py-0.5 rounded-sm text-[10px] font-mono font-semibold bg-blue-100 dark:bg-blue-950/70 text-blue-700 dark:text-blue-300">INFO</span>;
     }
   };
 
@@ -38,14 +38,14 @@ export const EventLog: React.FC = () => {
   };
 
   return (
-    <div className="bg-white dark:bg-[#0B0F19] border-t border-slate-200 dark:border-slate-800 p-5 shadow-sm space-y-4 h-full flex flex-col text-slate-800 dark:text-slate-100 transition-colors duration-200">
+    <div className="bg-paper-raised dark:bg-[#121315] border-t border-slate-200 dark:border-slate-800 p-5 shadow-sm space-y-4 h-full flex flex-col text-slate-800 dark:text-slate-100 transition-colors duration-200">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pb-3 border-b border-slate-100 dark:border-slate-800">
         <div className="flex items-center gap-2">
           <div className="p-2 rounded-xl bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-emerald-400">
             <ScrollText className="w-4 h-4" />
           </div>
           <div>
-            <h3 className="text-sm font-bold text-slate-900 dark:text-white">Deterministic Event Audit Log</h3>
+            <h3 className="text-sm font-semibold text-slate-900 dark:text-white">Deterministic Event Audit Log</h3>
             <p className="text-xs text-slate-500 dark:text-slate-400">Live tick chronological packet transitions and state events</p>
           </div>
         </div>
@@ -88,7 +88,7 @@ export const EventLog: React.FC = () => {
             <div key={evt.id} className="p-2.5 hover:bg-slate-50/80 dark:hover:bg-slate-800/50 flex items-start gap-2.5 transition-colors">
               <span className="text-[10px] text-slate-400 dark:text-slate-500 shrink-0 mt-0.5">T{evt.tick}</span>
               {getSeverityBadge(evt.severity)}
-              <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 shrink-0">
+              <span className="px-2 py-0.5 rounded-sm text-[10px] font-semibold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 shrink-0">
                 {evt.type}
               </span>
               <span className="text-slate-700 dark:text-slate-200 flex-1 leading-snug break-words">
